@@ -1,0 +1,286 @@
+.jewellery-menu-page {
+  padding: 40px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f9f9fb;
+  color: #333;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.menu-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.menu-logo {
+  max-width: 180px;
+  height: auto;
+}
+
+/* Navigation container (from your Nav component) */
+.nav {
+  margin-bottom: 40px;
+}
+
+/* Section styling */
+.jewellery-section {
+  margin-bottom: 50px;
+}
+
+.jewellery-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #007c8c; /* Tiffany-style blue */
+  border-bottom: 2px solid #007c8c;
+  padding-bottom: 6px;
+}
+
+/* Grid for jewelry cards */
+.jewellery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* Individual jewelry card */
+.jewellery-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  outline: none;
+}
+
+.jewellery-card:hover,
+.jewellery-card:focus {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 124, 140, 0.3);
+  outline: 3px solid #007c8c;
+  outline-offset: 2px;
+}
+
+/* Jewelry image inside the card */
+.jewellery-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+  flex-shrink: 0;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+/* Card info container */
+.jewellery-info {
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Jewelry name */
+.jewellery-info h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #004d52;
+  margin-bottom: 10px;
+}
+
+/* Jewelry parameters */
+.jewellery-params {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.jewellery-params p {
+  margin: 3px 0;
+}
+
+/* Price styling */
+.jewellery-price {
+  font-weight: 700;
+  font-size: 18px;
+  color: #222;
+  text-align: right;
+}
+
+/* Loader */
+.loader {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+  padding: 60px 0;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  font-size: 18px;
+  color: #999;
+  padding: 40px 0;
+}
+
+/* Info section at page bottom */
+.jewellery-menu-info {
+  margin-top: 60px;
+  font-size: 15px;
+  color: #666;
+  text-align: center;
+}
+
+.jewellery-menu-info p {
+  margin: 6px 0;
+}
+
+.jewellery-menu-info em {
+  font-style: italic;
+  color: #555;
+}
+
+.jewellery-menu-info strong {
+  color: #007c8c;
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(30, 30, 30, 0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Modal content container */
+.modal-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal image */
+.modal-image {
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  display: block;
+  border-radius: 6px;
+}
+
+/* Modal close button */
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 28px;
+  background: none;
+  border: none;
+  color: #444;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.modal-close-btn:hover,
+.modal-close-btn:focus {
+  background-color: #007c8c;
+  color: #fff;
+  outline: none;
+}
+
+/* Modal navigation buttons */
+.modal-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 40px;
+  background: rgba(0, 124, 140, 0.7);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: 50%;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.modal-nav-btn:hover,
+.modal-nav-btn:focus {
+  background: #007c8c;
+  outline: none;
+}
+
+.modal-nav-btn.left {
+  left: 10px;
+}
+
+.modal-nav-btn.right {
+  right: 10px;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 768px) {
+  .jewellery-title {
+    font-size: 22px;
+  }
+
+  .jewellery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .jewellery-image {
+    height: 180px;
+  }
+
+  .jewellery-info h3 {
+    font-size: 16px;
+  }
+
+  .jewellery-params {
+    font-size: 13px;
+  }
+
+  .jewellery-price {
+    font-size: 16px;
+  }
+
+  .modal-nav-btn {
+    font-size: 32px;
+    padding: 8px 12px;
+  }
+
+  .modal-close-btn {
+    font-size: 24px;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .jewellery-grid {
+    grid-template-columns: 1fr;
+  }
+}
