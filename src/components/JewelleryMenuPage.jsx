@@ -1,10 +1,45 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import Nav from "../components/Nav";
 import ScrollToTop from "../components/ScrollToTop";
-import { FocusTrap } from "focus-trap-react";
+
 import "../styles/JewelleryMenuPage.css";
+
+function trapFocus(element) {
+  const focusableSelectors = [
+    'a[href]',
+    'area[href]',
+    'input:not([disabled])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    'button:not([disabled])',
+    '[tabindex]:not([tabindex="-1"])',
+  ];
+
+  const focusableEls = element.querySelectorAll(focusableSelectors.join(','));
+  const firstEl = focusableEls[0];
+  const lastEl = focusableEls[focusableEls.length - 1];
+
+  function handleKeyDown(e) {
+    if (e.key !== 'Tab') return;
+
+    if (e.shiftKey) {
+      if (document.activeElement === firstEl) {
+        e.preventDefault();
+        lastEl.focus();
+      }
+    } else {
+      if (document.activeElement === lastEl) {
+        e.preventDefault();
+        firstEl.focus();
+      }
+    }
+  }
+
+  element.addEventListener('keydown', handleKeyDown);
+  return () => element.removeEventListener('keydown', handleKeyDown);
+}
 
 function slugify(text) {
   return text
@@ -18,6 +53,13 @@ function slugify(text) {
 
 // Modal կոմպոնենտ նկարների դիտման համար
 function ImageModal({ images, currentIndex, onClose, onNext, onPrev }) {
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+    const deactivate = trapFocus(modalRef.current);
+    return () => deactivate();
+  }, []);
+
   useEffect(() => {
     function onKeyDown(e) {
       if (e.key === "Escape") onClose();
@@ -38,49 +80,42 @@ function ImageModal({ images, currentIndex, onClose, onNext, onPrev }) {
       aria-modal="true"
       tabIndex={-1}
     >
-      <FocusTrap
-        focusTrapOptions={{
-          clickOutsideDeactivates: true,
-          escapeDeactivates: false,
-        }}
+      <div
+        ref={modalRef}
+        className="modal-content"
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <button
-            className="modal-close-btn"
-            onClick={onClose}
-            aria-label="Փակել նկարի պատուհանը"
-            autoFocus
-          >
-            ✕
-          </button>
+        <button
+          className="modal-close-btn"
+          onClick={onClose}
+          aria-label="Փակել նկարի պատուհանը"
+          autoFocus
+        >
+          ✕
+        </button>
 
-          <img
-            src={images[currentIndex]}
-            alt={`Նկար ${currentIndex + 1} - ընդհանուր ${images.length}`}
-            className="modal-image"
-            loading="lazy"
-          />
+        <img
+          src={images[currentIndex]}
+          alt={`Նկար ${currentIndex + 1} - ընդհանուր ${images.length}`}
+          className="modal-image"
+          loading="lazy"
+        />
 
-          {images.length > 1 && (
-            <>
-              <button
-                className="modal-nav-btn left"
-                onClick={onPrev}
-                aria-label="Նախորդ նկար"
-              >
-                
-              </button>
-              <button
-                className="modal-nav-btn right"
-                onClick={onNext}
-                aria-label="Հաջորդ նկար"
-              >
-                
-              </button>
-            </>
-          )}
-        </div>
-      </FocusTrap>
+        {images.length > 1 && (
+          <>
+            <button
+              className="modal-nav-btn left"
+              onClick={onPrev}
+              aria-label="Նախորդ նկար"
+            />
+            <button
+              className="modal-nav-btn right"
+              onClick={onNext}
+              aria-label="Հաջորդ նկար"
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 }
