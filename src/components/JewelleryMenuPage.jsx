@@ -3,7 +3,7 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import Nav from "../components/Nav";
 import ScrollToTop from "../components/ScrollToTop";
-import FocusTrap from "focus-trap-react";
+import { FocusTrap } from "focus-trap-react";
 import "../styles/JewelleryMenuPage.css";
 
 function slugify(text) {
