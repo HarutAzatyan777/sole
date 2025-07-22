@@ -68,14 +68,14 @@ function ImageModal({ images, currentIndex, onClose, onNext, onPrev }) {
                 onClick={onPrev}
                 aria-label="Նախորդ նկար"
               >
-                ‹
+                
               </button>
               <button
                 className="modal-nav-btn right"
                 onClick={onNext}
                 aria-label="Հաջորդ նկար"
               >
-                ›
+                
               </button>
             </>
           )}
