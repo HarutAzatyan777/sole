@@ -4,7 +4,7 @@
     position: fixed;
     bottom: 40px;
     right: 40px;
-    background-color: #2B33C3; /* Քո ցանկալի ֆոն */
+    background-color: #a0d8d365; /* Քո ցանկալի ֆոն */
     color: #ffffff;
     border: none;
     border-radius: 50%;
@@ -12,13 +12,13 @@
     height: 45px;
     font-size: 1.5rem;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0);
     transition: transform 0.3s, background 0.3s;
     z-index: 9999;
   }
   
   .scroll-to-top:hover {
     transform: scale(1.1);
-    background-color: #1a219c; /* ավելի մուգ hover */
+    background-color:#55a39d; /* ավելի մուգ hover */
   }
   

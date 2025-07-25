@@ -72,7 +72,7 @@ export default function ItemForm({
       {/* Գին */}
       <input
         type="number"
-        placeholder="Գին (AMD)"
+        placeholder="Գին ($)"
         value={itemPrice}
         onChange={(e) => setItemPrice(e.target.value)}
       />

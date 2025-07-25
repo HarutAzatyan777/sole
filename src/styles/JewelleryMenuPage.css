@@ -36,119 +36,37 @@
   padding-bottom: 6px;
 }
 
-/* Grid for jewelry cards */
+/* Flexbox for jewelry cards */
 .jewellery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 24px;
-}
-
-/* Individual jewelry card */
-.jewellery-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  outline: none;
-}
-
-.jewellery-card:hover,
-.jewellery-card:focus {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 124, 140, 0.3);
-  outline: 3px solid #007c8c;
-  outline-offset: 2px;
-}
-
-/* Jewelry image inside the card */
-.jewellery-image {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  background: #eee;
-  border-bottom: 1px solid #ddd;
-  flex-shrink: 0;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-}
-
-/* Card info container */
-.jewellery-info {
-  padding: 16px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
   justify-content: space-between;
 }
 
-/* Jewelry name */
-.jewellery-info h3 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #004d52;
-  margin-bottom: 10px;
+/* Each card */
+.jewellery-grid > * {
+  flex: 1 1 calc(33.333% - 24px); /* 3 items per row with spacing */
+  max-width: calc(33.333% - 24px);
 }
 
-/* Jewelry parameters */
-.jewellery-params {
-  font-size: 14px;
-  color: #555;
-  line-height: 1.5;
-  margin-bottom: 14px;
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .jewellery-grid > * {
+    flex: 1 1 calc(50% - 24px);
+    max-width: calc(50% - 24px);
+  }
 }
 
-.jewellery-params p {
-  margin: 3px 0;
+@media (max-width: 600px) {
+  .jewellery-grid > * {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
 }
 
-/* Price styling */
-.jewellery-price {
-  font-weight: 700;
-  font-size: 18px;
-  color: #222;
-  text-align: right;
-}
+/* Individual jewelry card */
 
-/* Loader */
-.loader {
-  text-align: center;
-  font-size: 18px;
-  color: #777;
-  padding: 60px 0;
-}
-
-/* Empty state */
-.empty-state {
-  text-align: center;
-  font-size: 18px;
-  color: #999;
-  padding: 40px 0;
-}
-
-/* Info section at page bottom */
-.jewellery-menu-info {
-  margin-top: 60px;
-  font-size: 15px;
-  color: #666;
-  text-align: center;
-}
-
-.jewellery-menu-info p {
-  margin: 6px 0;
-}
-
-.jewellery-menu-info em {
-  font-style: italic;
-  color: #555;
-}
-
-.jewellery-menu-info strong {
-  color: #007c8c;
-}
 
 /* Modal backdrop */
 .modal-backdrop {

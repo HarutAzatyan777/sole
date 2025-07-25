@@ -1,0 +1,194 @@
+.image-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 10, 10, 0.95);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease-in-out;
+  padding: 1rem;
+  cursor: default;
+}
+
+.image-modal-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 90vw;
+  max-height: 90vh;
+  box-sizing: border-box;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.8);
+  overflow: hidden;
+}
+
+.image-container.modal-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 124, 140, 0.5);
+  transition: transform 0.3s ease;
+  user-select: none;
+  cursor: url("../../../public/zoom-in.png") 20 20, zoom-in;
+}
+
+.modal-image.zoomed {
+  cursor: grab;
+  transition: transform 0.1s ease;
+}
+
+.modal-image.zoomed:active {
+  cursor: grabbing;
+}
+
+.zoom-hint-icon {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.modal-info {
+  margin-top: 1rem;
+  padding: 0 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  text-align: left;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modal-info h2 {
+  margin: 0 0 0.5rem;
+  font-size: 24px;
+  color: #007c8c;
+  font-weight: 700;
+}
+
+.modal-info p {
+  margin: 6px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.close-button {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  font-size: 2.5rem;
+  background: transparent;
+  color: #007c8c;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-button:hover {
+  color: #004f55;
+}
+
+.nav-button {
+  background: transparent;
+  border: none;
+  font-size: 3rem;
+  color: #007c8c;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+  user-select: none;
+}
+
+.nav-button.prev {
+  left: 1rem;
+}
+
+.nav-button.next {
+  right: 1rem;
+}
+
+.nav-button:hover {
+  color: #004f55;
+}
+
+.image-index {
+  color: #666;
+  margin-top: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-image {
+    width: 100%;
+    height: auto;
+    max-height: 50vh;
+  }
+
+  .modal-info {
+    padding: 0 0.5rem;
+    font-size: 14px;
+  }
+
+  .modal-info h2 {
+    font-size: 20px;
+  }
+
+  .close-button {
+    font-size: 2rem;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .nav-button {
+    font-size: 2.5rem;
+    padding: 0.3rem;
+  }
+
+  .zoom-hint-icon {
+    width: 26px;
+    height: 26px;
+  }
+}
