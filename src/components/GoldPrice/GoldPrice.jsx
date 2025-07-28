@@ -35,12 +35,9 @@ const GoldPrice = () => {
   const apiKey = "goldapi-1db5oxrlrxf6yrv-io";
   const STORAGE_KEY = "metal_price_cache";
 
-  // 2% զեղչ հայկական շուկայում ոսկու գնի համար
   const armenianMarketDiscountPercent = 2;
 
   const fetchPrices = (selectedCurrency) => {
-    console.log("Starting fetchPrices for currency:", selectedCurrency);
-
     const now = new Date();
     const formattedDateTime = now.toISOString().slice(0, 16).replace("T", " ");
     const today = now.toISOString().split("T")[0];
@@ -54,8 +51,6 @@ const GoldPrice = () => {
       cachedEntry.goldGram !== null &&
       cachedEntry.silverGram !== null
     ) {
-      console.log("Using cached prices:", cachedEntry);
-
       if (goldPricePerGram !== null && goldPricePerGram !== cachedEntry.goldGram) {
         setGoldPriceChanged(true);
         setTimeout(() => setGoldPriceChanged(false), 1500);
@@ -81,10 +76,7 @@ const GoldPrice = () => {
         "Content-Type": "application/json",
       },
     }).then((res) => {
-      if (!res.ok) {
-        console.error("Gold API fetch failed with status:", res.status);
-        throw new Error("Gold API Error");
-      }
+      if (!res.ok) throw new Error("Gold API Error");
       return res.json();
     });
 
@@ -95,29 +87,19 @@ const GoldPrice = () => {
         "Content-Type": "application/json",
       },
     }).then((res) => {
-      if (!res.ok) {
-        console.error("Silver API fetch failed with status:", res.status);
-        throw new Error("Silver API Error");
-      }
+      if (!res.ok) throw new Error("Silver API Error");
       return res.json();
     });
 
     Promise.all([goldFetch, silverFetch])
       .then(([goldData, silverData]) => {
-        console.log("Gold API response:", goldData);
-        console.log("Silver API response:", silverData);
-
         const goldPricePerOunce = goldData.price;
         const silverPricePerOunce = silverData.price;
 
-        if (!goldPricePerOunce || !silverPricePerOunce) {
-          throw new Error("Missing price data in response");
-        }
+        if (!goldPricePerOunce || !silverPricePerOunce) throw new Error("Missing price data");
 
         const goldGramPrice = goldPricePerOunce / 31.1035;
         const silverGramPrice = silverPricePerOunce / 31.1035;
-
-        // Հայկական շուկայում 2% զեղչ
         const discountedGoldGramPrice = goldGramPrice * (1 - armenianMarketDiscountPercent / 100);
 
         if (goldPricePerGram !== null && goldPricePerGram !== discountedGoldGramPrice) {
@@ -185,13 +167,9 @@ const GoldPrice = () => {
   };
 
   useEffect(() => {
-    console.log("Effect triggered for currency:", currency);
-    if (updateTimeoutRef.current) {
-      clearTimeout(updateTimeoutRef.current);
-    }
+    if (updateTimeoutRef.current) clearTimeout(updateTimeoutRef.current);
 
     const scheduleNextUpdate = () => {
-      console.log("Scheduling next update for currency:", currency);
       fetchPrices(currency);
       const timeout = getMillisUntilNextUpdate();
       updateTimeoutRef.current = setTimeout(() => {
@@ -202,9 +180,7 @@ const GoldPrice = () => {
     scheduleNextUpdate();
 
     return () => {
-      if (updateTimeoutRef.current) {
-        clearTimeout(updateTimeoutRef.current);
-      }
+      if (updateTimeoutRef.current) clearTimeout(updateTimeoutRef.current);
     };
   }, [currency]);
 
@@ -215,7 +191,7 @@ const GoldPrice = () => {
   return (
     <div className="gold-price-container">
       <label>
-        Ընտրեք արժույթը՝{" "}
+        Ընտրեք արժույթը՝
         <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
           <option value="USD">USD $</option>
           <option value="EUR">EUR €</option>
@@ -231,10 +207,7 @@ const GoldPrice = () => {
       ) : goldPricePerGram !== null && silverPricePerGram !== null ? (
         <>
           <p className={`price ${goldPriceChanged ? "price-change" : ""}`}>
-            1 գրամ մաքուր ոսկու գին՝{" "}
-            <strong>
-              {goldPricePerGram.toFixed(2).toLocaleString()} {currency}
-            </strong>
+            1 գրամ մաքուր ոսկու գին՝ <strong>{goldPricePerGram.toFixed(2)} {currency}</strong>
           </p>
           <p className="update-time">Վերջին թարմացում՝ {lastUpdateDateTime}</p>
 
@@ -247,42 +220,31 @@ const GoldPrice = () => {
               </tr>
             </thead>
             <tbody>
-              {displayedKarats.map(([karat, purity]) => {
-                const price = goldPricePerGram * purity;
-                return (
-                  <tr key={karat}>
-                    <td>{karat}</td>
-                    <td style={{ textAlign: "right" }}>{price.toFixed(2)}</td>
-                  </tr>
-                );
-              })}
+              {displayedKarats.map(([karat, purity]) => (
+                <tr key={karat}>
+                  <td>{karat}</td>
+                  <td style={{ textAlign: "right" }}>{(goldPricePerGram * purity).toFixed(2)}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
           {!showMoreKarats && (
-            <button
-              className="toggle-btn"
-              onClick={() => setShowMoreKarats(true)}
-            >
+            <button className="toggle-btn" onClick={() => setShowMoreKarats(true)}>
               More...
             </button>
           )}
 
+          <h3 style={{ marginTop: "2rem" }}>⚪ 1 գրամ արծաթի գին ({currency})</h3>
+          <p className={`price ${silverPriceChanged ? "price-change" : ""}`}>
+            {silverPricePerGram.toFixed(2)} {currency}
+          </p>
+
           {showMoreKarats && (
-            <button
-              className="toggle-btn toggle-btn-secondary"
-              onClick={() => setShowMoreKarats(false)}
-            >
+            <button className="toggle-btn toggle-btn-secondary" onClick={() => setShowMoreKarats(false)}>
               Less
             </button>
           )}
-
-          <h3 style={{ marginTop: "2rem" }}>
-            ⚪ 1 գրամ արծաթի գին ({currency})
-          </h3>
-          <p className={`price ${silverPriceChanged ? "price-change" : ""}`}>
-            {silverPricePerGram.toFixed(2).toLocaleString()} {currency}
-          </p>
         </>
       ) : (
         <p>Տվյալներ դեռ չկան</p>

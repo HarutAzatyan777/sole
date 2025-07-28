@@ -118,7 +118,7 @@ export default function JewelleryMenuPage() {
       <h2 className="menu-title">
         <img src="/logo.jpg" alt="sole_jewelry_ Logo" className="menu-logo" />
       </h2>
-      <GoldPrice />
+      {/* <GoldPrice /> */}
 
       <Nav categories={categorySlugs} />
 
