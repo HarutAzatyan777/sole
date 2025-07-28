@@ -38,12 +38,38 @@ export default function AdminPanelFirebase() {
     type: null,
     payload: null,
   });
+  const [videoUrls, setVideoUrls] = useState([]);
+const [newVideoUrl, setNewVideoUrl] = useState("");
 
   const cancelCategoryEdit = () => {
     setEditingCategory(null);
     setEditingCategoryName("");
     setEditingCategoryIconUrl("");
   };
+  const transformYoutubeUrlToEmbed = (url) => {
+    try {
+      const parsedUrl = new URL(url);
+      let videoId = null;
+  
+      if (parsedUrl.hostname.includes('youtu.be')) {
+        videoId = parsedUrl.pathname.slice(1);
+      } else if (parsedUrl.hostname.includes('youtube.com')) {
+        if (parsedUrl.pathname.startsWith('/shorts/')) {
+          videoId = parsedUrl.pathname.split('/')[2]; // получаем ID после /shorts/
+        } else {
+          videoId = parsedUrl.searchParams.get('v');
+        }
+      }
+  
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    } catch {
+      // fallback
+    }
+    return url;
+  };
+  
 
   const cancelItemEdit = () => {
     setEditingItem(null);
@@ -149,6 +175,7 @@ export default function AdminPanelFirebase() {
         nameEn: itemNameEn,
         price: itemPrice,
         imageUrls,
+        videoUrls,
         params: itemParams,
       }),
     });
@@ -179,6 +206,7 @@ export default function AdminPanelFirebase() {
               nameEn: itemNameEn,
               price: itemPrice,
               imageUrls,
+              videoUrls,
               params: itemParams,
             }
           : item
@@ -274,6 +302,10 @@ export default function AdminPanelFirebase() {
           editingItem={editingItem}
           editItem={editItem}
           cancelItemEdit={cancelItemEdit}
+          videoUrls={videoUrls}
+          setVideoUrls={setVideoUrls}
+          newVideoUrl={newVideoUrl}
+          setNewVideoUrl={setNewVideoUrl}
         />
       </div>
 
@@ -295,20 +327,63 @@ export default function AdminPanelFirebase() {
           </div>
 
           <ul style={{ listStyle: "none", padding: 0 }}>
-            {sec.items?.map((item, idx) => (
-              <li key={idx} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
-                {item.imageUrls?.map((url, i) => (
-                  <img key={i} src={url} alt="" style={{ width: 50, height: 50, objectFit: "cover", borderRadius: 6 }} />
-                ))}
-                <span style={{ flexGrow: 1 }}>
-                  {item.nameEn} / {item.nameHy} - {item.price} ֏
-                </span>
-                <ActionButton onAction={() => moveItemUp(sec.id, idx)} disabled={idx === 0}>⬆</ActionButton>
-                <ActionButton onAction={() => moveItemDown(sec.id, idx)} disabled={idx === sec.items.length - 1}>⬇</ActionButton>
-                <ActionButton onAction={() => startEditingItem(sec.id, item, idx)}>✏️</ActionButton>
-                <ActionButton onAction={() => askDeleteItem(sec.id, item)}>🗑</ActionButton>
-              </li>
-            ))}
+          {sec.items?.map((item, idx) => (
+  <li
+    key={idx}
+    style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "10px" }}
+  >
+    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+      {item.imageUrls?.map((url, i) => (
+        <img
+          key={i}
+          src={url}
+          alt=""
+          style={{ width: 50, height: 50, objectFit: "cover", borderRadius: 6 }}
+        />
+      ))}
+      <span style={{ flexGrow: 1 }}>
+        {item.nameEn} / {item.nameHy} - {item.price} ֏
+      </span>
+      <ActionButton onAction={() => moveItemUp(sec.id, idx)} disabled={idx === 0}>
+        ⬆
+      </ActionButton>
+      <ActionButton onAction={() => moveItemDown(sec.id, idx)} disabled={idx === sec.items.length - 1}>
+        ⬇
+      </ActionButton>
+      <ActionButton onAction={() => startEditingItem(sec.id, item, idx)}>✏️</ActionButton>
+      <ActionButton onAction={() => askDeleteItem(sec.id, item)}>🗑</ActionButton>
+    </div>
+
+    {/* ✅ Վիդեոներ այստեղ */}
+    {item.videoUrls?.map((url, i) => {
+  const embedUrl = transformYoutubeUrlToEmbed(url);
+  return embedUrl.includes("youtube.com/embed") ? (
+    <iframe
+      key={i}
+      width="120"
+      height="80"
+      src={embedUrl}
+      title={`video-${i}`}
+      frameBorder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowFullScreen
+    />
+  ) : (
+    <video
+      key={i}
+      src={url}
+      width={120}
+      height={80}
+      style={{ objectFit: "cover", borderRadius: 6 }}
+      controls
+    />
+  );
+})}
+
+  </li>
+))}
+
+            
           </ul>
         </div>
       ))}

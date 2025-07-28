@@ -1,34 +1,38 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import "./JewelleryCard.css";
 
 function JewelleryCard({ item, onOpenGallery }) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // Միայն նկարներն ենք օգտագործում այստեղ
+  const media = useMemo(() => {
+    const images = item.imageUrls || [];
+    return images; // միայն նկարներ
+  }, [item.imageUrls]);
+
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [isScaling, setIsScaling] = useState(false);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const intervalRef = useRef(null);
 
-  const images = item.imageUrls || [];
+  const animateMediaChange = useCallback(() => {
+    setIsScaling(true);
+    setTimeout(() => {
+      setCurrentMediaIndex((prev) => (prev + 1) % media.length);
+      setIsScaling(false);
+    }, 300);
+  }, [media.length]);
 
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (media.length <= 1) return;
 
-    const randomInterval = Math.floor(Math.random() * 3000) + 3000; // 3s–6s
+    const randomInterval = Math.floor(Math.random() * 3000) + 3000;
 
     intervalRef.current = setInterval(() => {
-      animateImageChange();
+      animateMediaChange();
     }, randomInterval);
 
     return () => clearInterval(intervalRef.current);
-  }, [images]);
-
-  const animateImageChange = () => {
-    setIsScaling(true);
-    setTimeout(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
-      setIsScaling(false);
-    }, 300); // Scale before image changes
-  };
+  }, [media, animateMediaChange]);
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.changedTouches[0].screenX;
@@ -43,20 +47,18 @@ function JewelleryCard({ item, onOpenGallery }) {
     const delta = touchStartX.current - touchEndX.current;
     const threshold = 40;
     if (Math.abs(delta) > threshold) {
-      if (delta > 0) nextImage();
-      else prevImage();
+      if (delta > 0) nextMedia();
+      else prevMedia();
     }
   };
 
-  const nextImage = () => {
-    animateImageChange();
-  };
+  const nextMedia = () => animateMediaChange();
 
-  const prevImage = () => {
+  const prevMedia = () => {
     setIsScaling(true);
     setTimeout(() => {
-      setCurrentImageIndex((prev) =>
-        prev === 0 ? images.length - 1 : prev - 1
+      setCurrentMediaIndex((prev) =>
+        prev === 0 ? media.length - 1 : prev - 1
       );
       setIsScaling(false);
     }, 300);
@@ -67,9 +69,9 @@ function JewelleryCard({ item, onOpenGallery }) {
       className="jewellery-card"
       tabIndex={0}
       role="button"
-      onClick={() => onOpenGallery(images)}
+      onClick={() => onOpenGallery([... (item.imageUrls || []), ...(item.videoUrls || [])])} // Modal-ին տալիս ենք ամբողջ media
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") onOpenGallery(images);
+        if (e.key === "Enter" || e.key === " ") onOpenGallery([... (item.imageUrls || []), ...(item.videoUrls || [])]);
       }}
       aria-label={`${item.nameEn || item.nameHy} - ${item.price} $`}
     >
@@ -78,20 +80,25 @@ function JewelleryCard({ item, onOpenGallery }) {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <img
-          src={images[currentImageIndex] || ""}
-          alt={item.nameEn || item.nameHy || "Նկար"}
-          className={`jewellery-image ${isScaling ? "scale-effect" : ""}`}
-          loading="lazy"
-        />
+        {(() => {
+          const current = media[currentMediaIndex];
+          return (
+            <img
+              src={current || ""}
+              alt={item.nameEn || item.nameHy || "Նկար"}
+              className={`jewellery-image ${isScaling ? "scale-effect" : ""}`}
+              loading="lazy"
+            />
+          );
+        })()}
 
-        {images.length > 1 && (
+        {media.length > 1 && (
           <>
             <button
               className="arrow prev"
               onClick={(e) => {
                 e.stopPropagation();
-                prevImage();
+                prevMedia();
               }}
             >
               ‹
@@ -100,21 +107,19 @@ function JewelleryCard({ item, onOpenGallery }) {
               className="arrow next"
               onClick={(e) => {
                 e.stopPropagation();
-                nextImage();
+                nextMedia();
               }}
             >
               ›
             </button>
             <div className="image-dots">
-              {images.map((_, idx) => (
+              {media.map((_, idx) => (
                 <div
                   key={idx}
-                  className={`image-dot ${
-                    idx === currentImageIndex ? "active" : ""
-                  }`}
+                  className={`image-dot ${idx === currentMediaIndex ? "active" : ""}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCurrentImageIndex(idx);
+                    setCurrentMediaIndex(idx);
                   }}
                 />
               ))}

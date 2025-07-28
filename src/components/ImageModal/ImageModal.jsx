@@ -13,6 +13,39 @@ export default function ImageModal({ images, currentIndex, onClose, onNext, onPr
   let touchStartX = 0;
   let touchEndX = 0;
 
+  // Ստուգում է թե վիդեո՞ է (mp4, webm, ogg)
+  const isVideo = (url) => /\.(mp4|webm|ogg)$/i.test(url);
+
+  // Ստուգում է YouTube URL
+  const isYouTube = (url) =>
+    url.includes("youtube.com") || url.includes("youtu.be");
+
+  // YouTube URL-ն վերածում embed տեսքի
+  const transformYoutubeUrlToEmbed = (url) => {
+    try {
+      const parsedUrl = new URL(url);
+      let videoId = null;
+  
+      if (parsedUrl.hostname.includes('youtu.be')) {
+        videoId = parsedUrl.pathname.slice(1);
+      } else if (parsedUrl.hostname.includes('youtube.com')) {
+        if (parsedUrl.pathname.startsWith('/shorts/')) {
+          videoId = parsedUrl.pathname.split('/')[2]; // получаем ID после /shorts/
+        } else {
+          videoId = parsedUrl.searchParams.get('v');
+        }
+      }
+  
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    } catch {
+      // fallback
+    }
+    return url;
+  };
+  
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === "Escape") onClose();
@@ -26,10 +59,6 @@ export default function ImageModal({ images, currentIndex, onClose, onNext, onPr
 
     const handleTouchEnd = (e) => {
       touchEndX = e.changedTouches[0].screenX;
-      handleGesture();
-    };
-
-    const handleGesture = () => {
       const diff = touchStartX - touchEndX;
       const threshold = 50;
       if (Math.abs(diff) > threshold) {
@@ -85,6 +114,8 @@ export default function ImageModal({ images, currentIndex, onClose, onNext, onPr
 
   if (!images || images.length === 0) return null;
 
+  const currentMedia = images[currentIndex];
+
   return (
     <div className="image-modal-overlay" ref={overlayRef}>
       <div className="image-modal-content">
@@ -93,30 +124,58 @@ export default function ImageModal({ images, currentIndex, onClose, onNext, onPr
         <div className="image-container modal-image-container">
           <button className="nav-button prev" onClick={onPrev} aria-label="Նախորդ" disabled={isZoomed}>←</button>
 
-          <img
-            ref={imageRef}
-            src={images[currentIndex]}
-            alt={`Նկար ${currentIndex + 1}`}
-            className={`modal-image ${isZoomed ? "zoomed" : ""}`}
-            style={{
-              transformOrigin,
-              transform: isZoomed
-                ? `scale(2) translate(${dragPos.x / 2}px, ${dragPos.y / 2}px)`
-                : "scale(1)",
-              cursor: isZoomed
-                ? "grab"
-                : 'url("/zoom-in.png") 24 24, zoom-in'
-            }}
-            loading="lazy"
-            onClick={handleImageClick}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            draggable={false}
-          />
+          {isVideo(currentMedia) ? (
+  <video
+    src={currentMedia}
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="modal-video"
+    style={{ width: "100%", height: "100%", objectFit: "contain" }}
+    onClick={handleImageClick}
+    onMouseDown={handleMouseDown}
+    onMouseMove={handleMouseMove}
+    onMouseUp={handleMouseUp}
+    onMouseLeave={handleMouseUp}
+    draggable={false}
+    controls={false} // <<< controls հեռացված
+  />
+) : isYouTube(currentMedia) ? (
+  <iframe
+    src={transformYoutubeUrlToEmbed(currentMedia) + "?autoplay=1&loop=1&controls=0&mute=1&playlist=" + transformYoutubeUrlToEmbed(currentMedia).split("/").pop()}
+    title="YouTube Video"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+    className="modal-video"
+    style={{ width: "100%", height: "100%", border: "none" }}
+  />
+) : (
+            <img
+              ref={imageRef}
+              src={currentMedia}
+              alt={`Նկար ${currentIndex + 1}`}
+              className={`modal-image ${isZoomed ? "zoomed" : ""}`}
+              style={{
+                transformOrigin,
+                transform: isZoomed
+                  ? `scale(2) translate(${dragPos.x / 2}px, ${dragPos.y / 2}px)`
+                  : "scale(1)",
+                cursor: isZoomed
+                  ? "grab"
+                  : 'url("/zoom-in.png") 24 24, zoom-in'
+              }}
+              loading="lazy"
+              onClick={handleImageClick}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              draggable={false}
+            />
+          )}
 
-          {showTouchIcon && !isZoomed && (
+          {showTouchIcon && !isZoomed && !isVideo(currentMedia) && (
             <img src="/zoom-in.png" alt="Zoom icon" className="zoom-hint-icon" />
           )}
 

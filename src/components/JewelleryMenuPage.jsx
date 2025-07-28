@@ -8,6 +8,7 @@ import JewelleryCard from "./JewelleryCard/JewelleryCard";
 import "../styles/JewelleryMenuPage.css";
 import ImageModal from "./ImageModal/ImageModal";
 import JewelleryMenuInfo from "./JewelleryMenuInfo/JewelleryMenuInfo";
+import GoldPrice from "./GoldPrice/GoldPrice";
 
 function slugify(text) {
   return text
@@ -31,13 +32,18 @@ function JewelleryMenuSection({ section, onOpenGallery }) {
       </h3>
 
       <div className="jewellery-grid">
-        {section.items?.map((item) => (
-          <JewelleryCard
-            key={item.id}
-            item={item}
-            onOpenGallery={() => onOpenGallery(item.imageUrls || [], item)}
-          />
-        ))}
+      {section.items?.map((item, index) => (
+  <JewelleryCard
+    key={item.id || index} // fallback to index if no id
+    item={item}
+    onOpenGallery={() =>
+      onOpenGallery(
+        [...(item.imageUrls || []), ...(item.videoUrls || [])],
+        item
+      )
+    }
+  />
+))}
       </div>
     </section>
   );
@@ -112,6 +118,7 @@ export default function JewelleryMenuPage() {
       <h2 className="menu-title">
         <img src="/logo.jpg" alt="sole_jewelry_ Logo" className="menu-logo" />
       </h2>
+      <GoldPrice />
 
       <Nav categories={categorySlugs} />
 
