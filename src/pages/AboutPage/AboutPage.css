@@ -1,0 +1,50 @@
+.about-page {
+  padding: 2rem 1rem;
+  background-color: #e0f7f7; /* շատ վառ չէ, մաքուր կապույտ/սպիտակ */
+  color: #004d4d; /* խորը կապույտ-կանաչ երանգ */
+  font-family: 'Playfair Display', serif; /* նրբագեղ տառատեսակ */
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  border: 2px solid #81d8d0; /* Tiffany blue սահուն շրջանակ */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 128, 128, 0.2);
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.about-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #0abab5; /* Tiffany blue - ավելի վառ */
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.about-page p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  color: #004d4d;
+}
+
+.about-page hr {
+  border: 0;
+  border-top: 2px solid #81d8d0;
+  margin: 2rem 0;
+}
+
+@media (max-width: 600px) {
+  .about-page {
+    padding: 1rem 1rem;
+    margin: 1rem;
+  }
+
+  .about-page h1 {
+    font-size: 1.8rem;
+  }
+
+  .about-page p {
+    font-size: 1rem;
+  }
+}
