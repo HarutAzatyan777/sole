@@ -14,7 +14,7 @@ export default function Nav({ categories }) {
 
   useEffect(() => {
     function onScroll() {
-      const scrollPosition = window.scrollY + window.innerHeight / 3;
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
 
       let currentSlug = null;
       for (const { slug } of categories) {
@@ -23,14 +23,13 @@ export default function Nav({ categories }) {
           currentSlug = slug;
         }
       }
+
       if (currentSlug !== activeSlug) {
         setActiveSlug(currentSlug);
       }
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
-
-    // Initialize active slug on mount
     onScroll();
 
     return () => window.removeEventListener("scroll", onScroll);
@@ -46,7 +45,8 @@ export default function Nav({ categories }) {
             className={`qr-nav-button ${activeSlug === slug ? "active" : ""}`}
             aria-current={activeSlug === slug ? "true" : undefined}
           >
-            {name}
+            <span className="text">{name}</span>
+            <span className="underline" />
           </button>
         ))}
       </div>

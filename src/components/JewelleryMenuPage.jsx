@@ -149,7 +149,7 @@ export default function JewelleryMenuPage() {
           });
         }}
       >
-        <span className="arrow-down">&#x2193;</span> {/* ↓ սլաք */}
+        <span className="arrow-down"></span> {/* ↓ սլաք */}
       </div>
     </div>
     

@@ -6,6 +6,7 @@ import AboutPage from "./pages/AboutPage/AboutPage";
 import ContactPage from "./pages/ContactPage/ContactPage";
 import AdminPanelFirebase from "./components/AdminPanelFirebase";
 import LoginForm from "./components/LoginForm";
+import DiamondHierarchy from "./pages/DiamondHierarchy/DiamondHierarchy";
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
@@ -40,6 +41,16 @@ export const getRoutes = (user) => [
       </>
     }
   />,
+  <Route
+  key="/diamond-hierarchy"
+  path="/diamond-hierarchy"
+  element={
+    <>
+      <Header />
+      <DiamondHierarchy />
+    </>
+  }
+/>,
   <Route
     key="/contact"
     path="/contact"
