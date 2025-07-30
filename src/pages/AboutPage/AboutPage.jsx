@@ -4,7 +4,7 @@ import "./AboutPage.css"; // Optional if you're styling separately
 const AboutPage = () => {
   return (
     <section className="about-page">
-      <div className="container">
+      <div className="aboute-container">
         <h1>Մեր Մասին</h1>
         <p>
           Sole Jewelry-ն նվիրված է ստեղծելու բացառիկ ոսկյա և արծաթյա զարդեր, որոնք

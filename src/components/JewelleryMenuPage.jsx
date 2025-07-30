@@ -4,23 +4,20 @@ import { db } from "../firebase";
 import Nav from "../components/Nav";
 import ScrollToTop from "../components/ScrollToTop";
 import JewelleryCard from "./JewelleryCard/JewelleryCard";
-
 import "../styles/JewelleryMenuPage.css";
 import ImageModal from "./ImageModal/ImageModal";
 import JewelleryMenuInfo from "./JewelleryMenuInfo/JewelleryMenuInfo";
-import GoldPrice from "./GoldPrice/GoldPrice";
 
 function slugify(text) {
   return text
     .toString()
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, "-") // Բոլոր բացատները փոխում ենք -
-    .replace(/[^\p{L}\p{N}-]+/gu, "") // Թույլատրում ենք միայն տառեր (L), թվեր (N), և - նշանը
-    .replace(/--+/g, "-"); // Երկուից ավել - վերացնում ենք
+    .replace(/\s+/g, "-")
+    .replace(/[^\p{L}\p{N}-]+/gu, "")
+    .replace(/--+/g, "-");
 }
 
-// Բաժին + grid կոմպոնենտ
 function JewelleryMenuSection({ section, onOpenGallery }) {
   return (
     <section
@@ -32,24 +29,23 @@ function JewelleryMenuSection({ section, onOpenGallery }) {
       </h3>
 
       <div className="jewellery-grid">
-      {section.items?.map((item, index) => (
-  <JewelleryCard
-    key={item.id || index} // fallback to index if no id
-    item={item}
-    onOpenGallery={() =>
-      onOpenGallery(
-        [...(item.imageUrls || []), ...(item.videoUrls || [])],
-        item
-      )
-    }
-  />
-))}
+        {section.items?.map((item, index) => (
+          <JewelleryCard
+            key={item.id || index}
+            item={item}
+            onOpenGallery={() =>
+              onOpenGallery(
+                [...(item.imageUrls || []), ...(item.videoUrls || [])],
+                item
+              )
+            }
+          />
+        ))}
       </div>
     </section>
   );
 }
 
-// Գլխավոր էջի կոմպոնենտ
 export default function JewelleryMenuPage() {
   const [menu, setMenu] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,7 +63,10 @@ export default function JewelleryMenuPage() {
       try {
         const q = query(collection(db, "menu"), orderBy("order"));
         const snapshot = await getDocs(q);
-        const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const data = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setMenu(data);
       } catch (error) {
         console.error("Չհաջողվեց բեռնել մենյուն։", error);
@@ -77,12 +76,26 @@ export default function JewelleryMenuPage() {
     };
     fetchMenu();
   }, []);
+  useEffect(() => {
+    const hero = document.getElementById("heroSection");
+
+    const onScroll = () => {
+      if (window.scrollY > 250) {
+        hero.classList.add("shrink");
+      } else {
+        hero.classList.remove("shrink");
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     if (!activeGallery) return;
-
     const nextIndex = (activeIndex + 1) % activeGallery.length;
-    const prevIndex = (activeIndex - 1 + activeGallery.length) % activeGallery.length;
+    const prevIndex =
+      (activeIndex - 1 + activeGallery.length) % activeGallery.length;
 
     const preloadNext = new Image();
     preloadNext.src = activeGallery[nextIndex];
@@ -110,51 +123,80 @@ export default function JewelleryMenuPage() {
 
   const prevImage = useCallback(() => {
     if (!activeGallery) return;
-    setActiveIndex((prev) => (prev - 1 + activeGallery.length) % activeGallery.length);
+    setActiveIndex(
+      (prev) => (prev - 1 + activeGallery.length) % activeGallery.length
+    );
   }, [activeGallery]);
 
   return (
     <div className="jewellery-menu-page">
-      <h2 className="menu-title">
-        <img src="/favicon.ico" alt="sole_jewelry_ Logo" className="menu-logo" />
-      </h2>
-      {/* <GoldPrice /> */}
-
-      <Nav categories={categorySlugs} />
-
-      {loading ? (
-        <div className="loader" aria-label="Մենյուն բեռնվում է...">
-          <span>Մենյուն բեռնվում է...</span>
-        </div>
-      ) : menu.length === 0 ? (
-        <p className="empty-state">
-          Մենյուն դեռ դատարկ է։ Խնդրում ենք փորձել ավելի ուշ կամ կապվել մեզ հետ։
-        </p>
-      ) : (
-        menu.map((section) => (
-          <JewelleryMenuSection
-            key={section.id}
-            section={section}
-            onOpenGallery={openGallery}
-          />
-        ))
-      )}
-
-      {activeGallery && (
-        <ImageModal
-          images={activeGallery}
-          currentIndex={activeIndex}
-          onClose={closeGallery}
-          onNext={nextImage}
-          onPrev={prevImage}
-          item={activeItem}
-        />
-      )}
-
-      <div className="jewellery-menu-info">
-  <JewelleryMenuInfo />
+      {/* HERO VIDEO SECTION */}
+      <section className="hero-video-section" id="heroSection">
+  <video autoPlay muted loop playsInline className="hero-video">
+    <source src="/videos/jewelry-bg2.mp4" type="video/mp4" />
+    Ձեր դիտարկիչը չի աջակցում տեսանյութերին։
+  </video>
+  <div className="hero-overlay">
+    <div className="hero-text">
+      <h1>Նորաձևությունը անցնում է, ոճը մնում է</h1>
+      <p>Բացահայտիր ոսկու շքեղ աշխարհը Sole Jewelry-ի հետ</p>
+      <div
+        className="scroll-down-indicator"
+        onClick={() => {
+          window.scrollTo({
+            top: window.innerHeight,
+            behavior: "smooth",
+          });
+        }}
+      >
+        <span className="arrow-down">&#x2193;</span> {/* ↓ սլաք */}
       </div>
+    </div>
+    
+  </div>
+</section>
+
+
+      {/* MENU CONTENT */}
+      <div className="jewellery-menu-content">
+        <Nav categories={categorySlugs} />
+
+        {loading ? (
+          <div className="loader" aria-label="Մենյուն բեռնվում է...">
+            <span>Մենյուն բեռնվում է...</span>
+          </div>
+        ) : menu.length === 0 ? (
+          <p className="empty-state">
+            Մենյուն դեռ դատարկ է։ Խնդրում ենք փորձել ավելի ուշ կամ կապվել մեզ
+            հետ։
+          </p>
+        ) : (
+          menu.map((section) => (
+            <JewelleryMenuSection
+              key={section.id}
+              section={section}
+              onOpenGallery={openGallery}
+            />
+          ))
+        )}
+
+        {activeGallery && (
+          <ImageModal
+            images={activeGallery}
+            currentIndex={activeIndex}
+            onClose={closeGallery}
+            onNext={nextImage}
+            onPrev={prevImage}
+            item={activeItem}
+          />
+        )}
+
+        <div className="jewellery-menu-info">
+          <JewelleryMenuInfo />
+        </div>
+
         <ScrollToTop />
+      </div>
     </div>
   );
 }

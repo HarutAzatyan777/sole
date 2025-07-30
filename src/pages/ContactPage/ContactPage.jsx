@@ -4,7 +4,7 @@ import "./ContactPage.css"; // Optional: for styling
 const ContactPage = () => {
   return (
     <section className="contact-page">
-      <div className="container">
+      <div className="contact-container">
         <h1>Կապ մեզ հետ</h1>
 
         <div className="contact-info">
@@ -20,13 +20,20 @@ const ContactPage = () => {
 
           <div>
             <h3>Հասցե</h3>
-            <p>Մոսկովյան 26, Երևան</p>
+            <p>Խորենացի 24, Երևան</p>
           </div>
         </div>
 
         <div className="contact-hours">
           <h3>Աշխատանքային ժամեր</h3>
           <p>Երկուշաբթի - Կիրակի: 8:00 - 23:00</p>
+        </div>
+
+        <div className="contact-description">
+          <p>
+            Մեր ոսկյա զարդերը պատրաստված են բարձրորակ նյութերից՝ ավանդական արհեստավարժությամբ ու ժամանակակից դիզայնով։
+            Ամեն մի զարդ կրում է իր պատմությունը և առանձնահատկությունը՝ համատեղելով ժառանգությունը և նորարարությունը։
+          </p>
         </div>
       </div>
     </section>

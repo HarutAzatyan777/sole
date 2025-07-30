@@ -1,7 +1,7 @@
 import React from "react";
 
 const styles = {
-    container: {
+    img_container: {
       maxWidth: "800px",
       margin: "2rem auto",
       padding: "1.5rem 2rem",
@@ -54,7 +54,7 @@ const styles = {
 
 export default function JewelleryMenuInfo() {
   return (
-    <div style={styles.container}>
+    <div style={styles.img_container}>
       <h1 style={styles.title}>Ոսկյա զարդեր</h1>
       <p style={styles.address}>Հասցե՝ Խորենացի 24, Երևան</p>
       <p style={styles.description}>
