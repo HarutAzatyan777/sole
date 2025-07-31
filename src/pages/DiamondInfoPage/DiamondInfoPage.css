@@ -1,0 +1,158 @@
+.diamond-info-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 10;
+}
+
+/* Video as full width background */
+.video-section {
+  position: relative;
+  width: 100vw;  /* ամբողջական լայնություն */
+  height: 400px;  /* կամ ուզած բարձրություն */
+  overflow: hidden;
+  margin-bottom: 3rem;
+  border-radius: 0; /* կարող ես ավելացնել, եթե ուզես */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.video-section video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(0.7); /* Լույսը թեթև իջեցված, որ տեքստը երևա */
+}
+
+.video-section h1 {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  text-align: center;
+  padding-top: 1rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(0,0,0,0.7);
+}
+
+.info-section {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.info-box {
+  flex: 1 1 350px;
+  border: 1px solid #ddd;
+  padding: 1.5rem;
+  border-radius: 10px;
+  background-color: #fafafa;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: box-shadow 0.3s ease;
+}
+.info-box:hover {
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.info-box h2 {
+  margin-bottom: 1rem;
+  color: #222;
+  font-size: 1.8rem;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 0.3rem;
+}
+
+.color-card {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.color-description, .clarity-description {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.3;
+}
+
+.color-name, .clarity-grade {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #222;
+  margin-bottom: 0.3rem;
+}
+
+.color-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 0.7rem auto;
+  border: 1px solid #999;
+}
+
+/* Diamond SVG */
+.diamond-svg {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 0.7rem auto;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.diamond-svg:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Clarity SVG */
+.clarity-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  cursor: default;
+}
+.clarity-svg {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 1px rgba(0,0,0,0.2));
+}
+
+.clarity-grade {
+  min-width: 50px;
+}
+.cut-card {
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.cut-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #222;
+}
+
+.cut-description {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.3;
+  margin-top: 0.2rem;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .info-section {
+    flex-direction: column;
+  }
+}

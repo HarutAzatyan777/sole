@@ -6,7 +6,7 @@ import AboutPage from "./pages/AboutPage/AboutPage";
 import ContactPage from "./pages/ContactPage/ContactPage";
 import AdminPanelFirebase from "./components/AdminPanelFirebase";
 import LoginForm from "./components/LoginForm";
-import DiamondHierarchy from "./pages/DiamondHierarchy/DiamondHierarchy";
+import DiamondInfoPage from "./pages/DiamondInfoPage/DiamondInfoPage";
 import Footer from "./components/Footer/Footer";
 import SecretRedirect from "./components/SecretRedirect"; // ✅ Ավելացրու սա
 
@@ -50,13 +50,13 @@ export const getRoutes = (user) => [
     }
   />,
   <Route
-    key="/diamond-hierarchy"
-    path="/diamond-hierarchy"
+    key="/diamond-info"
+    path="/diamond-info"
     element={
       <>
         <Header />
         <SecretRedirect />
-        <DiamondHierarchy />
+        <DiamondInfoPage />
         <Footer />
       </>
     }
