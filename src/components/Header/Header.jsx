@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 
-
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -19,16 +18,16 @@ const Header = () => {
 
         <nav className={`navigation diamond-nav ${menuOpen ? "open" : ""}`}>
           <ul className="diamond-nav-list">
-            <li><Link to="/menu" onClick={() => setMenuOpen(false)}>Մենյու</Link></li>
-            <li><Link to="/about" onClick={() => setMenuOpen(false)}>Մեր մասին</Link></li>
-            <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Կապ</Link></li>
+            <li><Link to="/menu" onClick={() => setMenuOpen(false)}>Menu</Link></li>
+            <li><Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link></li>
+            <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact</Link></li>
           </ul>
         </nav>
 
         <button
           className={`burger diamond-burger ${menuOpen ? "open" : ""}`}
           onClick={toggleMenu}
-          aria-label={menuOpen ? "Փակել Մենյուն" : "Բացել Մենյուն"}
+          aria-label={menuOpen ? "Close Menu" : "Open Menu"}
         >
           {menuOpen ? (
             <svg width="24" height="24" viewBox="0 0 24 24">

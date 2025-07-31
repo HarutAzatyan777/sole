@@ -7,6 +7,8 @@ import ContactPage from "./pages/ContactPage/ContactPage";
 import AdminPanelFirebase from "./components/AdminPanelFirebase";
 import LoginForm from "./components/LoginForm";
 import DiamondHierarchy from "./pages/DiamondHierarchy/DiamondHierarchy";
+import Footer from "./components/Footer/Footer";
+import SecretRedirect from "./components/SecretRedirect"; // ✅ Ավելացրու սա
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
@@ -17,7 +19,9 @@ export const getRoutes = (user) => [
     element={
       <>
         <Header />
+        <SecretRedirect /> {/* ✅ Ավելացված է այստեղ */}
         <MenuPage />
+        <Footer />
       </>
     }
   />,
@@ -27,7 +31,9 @@ export const getRoutes = (user) => [
     element={
       <>
         <Header />
+        <SecretRedirect />
         <MenuPage />
+        <Footer />
       </>
     }
   />,
@@ -37,27 +43,33 @@ export const getRoutes = (user) => [
     element={
       <>
         <Header />
+        <SecretRedirect />
         <AboutPage />
+        <Footer />
       </>
     }
   />,
   <Route
-  key="/diamond-hierarchy"
-  path="/diamond-hierarchy"
-  element={
-    <>
-      <Header />
-      <DiamondHierarchy />
-    </>
-  }
-/>,
+    key="/diamond-hierarchy"
+    path="/diamond-hierarchy"
+    element={
+      <>
+        <Header />
+        <SecretRedirect />
+        <DiamondHierarchy />
+        <Footer />
+      </>
+    }
+  />,
   <Route
     key="/contact"
     path="/contact"
     element={
       <>
         <Header />
+        <SecretRedirect />
         <ContactPage />
+        <Footer />
       </>
     }
   />,
@@ -74,6 +86,7 @@ export const getRoutes = (user) => [
         <>
           <Header />
           <LoginForm />
+          <Footer />
         </>
       )
     }

@@ -1,25 +1,30 @@
 import React from "react";
-import "./AboutPage.css"; // Optional if you're styling separately
+import "./AboutPage.css"; // Make sure you handle styling for video
 
 const AboutPage = () => {
   return (
     <section className="about-page">
+      {/* Background video */}
+      <video className="background-video" autoPlay loop muted playsInline>
+        <source src="/videos/jewelry-bg.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
       <div className="aboute-container">
-        <h1>Մեր Մասին</h1>
+        <h1>About Us</h1>
         <p>
-          Sole Jewelry-ն նվիրված է ստեղծելու բացառիկ ոսկյա և արծաթյա զարդեր, որոնք
-          արտահայտում են նրբաճաշակ ոճը և անհատականությունը։ Մեր բոլոր արտադրանքները
-          պատրաստված են մեծ ուշադրությամբ և սիրով՝ ապահովելու որակ, կայունություն և
-          գեղեցկություն։
+          Sole Jewelry is dedicated to creating exceptional gold and silver jewelry
+          that expresses refined style and individuality. All of our products are
+          crafted with great care and love to ensure quality, durability, and beauty.
         </p>
         <p>
-          Մեր խանութը գործում է 2018 թվականից և մենք արդեն սպասարկել ենք հազարավոր
-          գոհ հաճախորդների՝ տեղական և միջազգային։ Մենք հպարտ ենք մեր հաճախորդների
-          վստահության և սիրո համար։
+          Our store has been operating since 2018, and we have already served
+          thousands of satisfied customers—both locally and internationally. We are
+          proud of the trust and affection of our clients.
         </p>
         <p>
-          Հետաքրքրվա՞ծ եք զարդերով՝ պատրաստված ձեր սեփական պատկերացմամբ։ Մենք
-          առաջարկում ենք անհատական պատվերների ընդունում՝ ըստ ձեր նախասիրությունների։
+          Interested in jewelry made to your own vision? We offer custom-made orders
+          tailored to your preferences.
         </p>
       </div>
     </section>

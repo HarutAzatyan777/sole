@@ -1,37 +1,52 @@
 .about-page {
-  padding: 2rem 1rem;
-  background-color: #e0f7f7; /* շատ վառ չէ, մաքուր կապույտ/սպիտակ */
-  color: #004d4d; /* խորը կապույտ-կանաչ երանգ */
-  font-family: 'Playfair Display', serif; /* նրբագեղ տառատեսակ */
-  white-space: normal;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  border: 2px solid #81d8d0; /* Tiffany blue սահուն շրջանակ */
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 128, 128, 0.2);
-  max-width: 800px;
-  margin: 2rem auto;
+  position: relative;
+  overflow: hidden;
+  color: #222; /* ավելի մուգ գույն՝ լավ տեսանելիության համար */
+  padding: 4rem 2rem;
+  z-index: 1;
+  font-family: 'Playfair Display', serif;
 }
-aboute-container
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.aboute-container {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.8); /* բաց սպիտակ թափանցիկություն՝ տեքստը կարդալու համար */
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid #d4af37; /* ոսկեգույն շրջանակ՝ համապատասխան վիդեոյին */
+}
 
 .about-page h1 {
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
   text-align: center;
-  color: #0abab5; /* Tiffany blue - ավելի վառ */
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  color: #1a1a1a; /* մուգ տեքստ */
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .about-page p {
   font-size: 1.1rem;
   line-height: 1.8;
   margin-bottom: 1rem;
-  color: #004d4d;
+  color: #333; /* հստակ, աչքի չզարնող մուգ մոխրագույն */
 }
 
 .about-page hr {
   border: 0;
-  border-top: 2px solid #81d8d0;
+  border-top: 2px solid #d4af37; /* ոսկեգույն տարանջատում */
   margin: 2rem 0;
 }
 

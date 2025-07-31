@@ -5,34 +5,34 @@ const ContactPage = () => {
   return (
     <section className="contact-page">
       <div className="contact-container">
-        <h1>Կապ մեզ հետ</h1>
+        <h1>Contact Us</h1>
 
         <div className="contact-info">
           <div>
-            <h3>Հեռախոս</h3>
+            <h3>Phone</h3>
             <p>+374 55 44-48-55</p>
           </div>
 
           <div>
-            <h3>Էլ. հասցե</h3>
+            <h3>Email</h3>
             <p>hello@solejewelry.com</p>
           </div>
 
           <div>
-            <h3>Հասցե</h3>
-            <p>Խորենացի 24, Երևան</p>
+            <h3>Address</h3>
+            <p>Khorenatsi 24, Yerevan</p>
           </div>
         </div>
 
         <div className="contact-hours">
-          <h3>Աշխատանքային ժամեր</h3>
-          <p>Երկուշաբթի - Կիրակի: 8:00 - 23:00</p>
+          <h3>Working Hours</h3>
+          <p>Monday - Sunday: 8:00 AM - 11:00 PM</p>
         </div>
 
         <div className="contact-description">
           <p>
-            Մեր ոսկյա զարդերը պատրաստված են բարձրորակ նյութերից՝ ավանդական արհեստավարժությամբ ու ժամանակակից դիզայնով։
-            Ամեն մի զարդ կրում է իր պատմությունը և առանձնահատկությունը՝ համատեղելով ժառանգությունը և նորարարությունը։
+            Our gold jewelry is crafted from high-quality materials with traditional craftsmanship and modern design.
+            Each piece tells its own story and uniqueness, blending heritage with innovation.
           </p>
         </div>
       </div>

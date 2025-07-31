@@ -6,7 +6,6 @@ import ScrollToTop from "../components/ScrollToTop";
 import JewelleryCard from "./JewelleryCard/JewelleryCard";
 import "../styles/JewelleryMenuPage.css";
 import ImageModal from "./ImageModal/ImageModal";
-import JewelleryMenuInfo from "./JewelleryMenuInfo/JewelleryMenuInfo";
 
 function slugify(text) {
   return text
@@ -137,23 +136,23 @@ export default function JewelleryMenuPage() {
     Ձեր դիտարկիչը չի աջակցում տեսանյութերին։
   </video>
   <div className="hero-overlay">
-    <div className="hero-text">
-      <h1>Նորաձևությունը անցնում է, ոճը մնում է</h1>
-      <p>Բացահայտիր ոսկու շքեղ աշխարհը Sole Jewelry-ի հետ</p>
-      <div
-        className="scroll-down-indicator"
-        onClick={() => {
-          window.scrollTo({
-            top: window.innerHeight,
-            behavior: "smooth",
-          });
-        }}
-      >
-        <span className="arrow-down"></span> {/* ↓ սլաք */}
-      </div>
+  <div className="hero-text">
+    <h1>Fashion fades, style remains</h1>
+    <p>Discover the luxurious world of gold with Sole Jewelry</p>
+    <div
+      className="scroll-down-indicator"
+      onClick={() => {
+        window.scrollTo({
+          top: window.innerHeight,
+          behavior: "smooth",
+        });
+      }}
+    >
+      <span className="arrow-down"></span> {/* ↓ arrow */}
     </div>
-    
   </div>
+</div>
+
 </section>
 
 
@@ -191,9 +190,7 @@ export default function JewelleryMenuPage() {
           />
         )}
 
-        <div className="jewellery-menu-info">
-          <JewelleryMenuInfo />
-        </div>
+
 
         <ScrollToTop />
       </div>
