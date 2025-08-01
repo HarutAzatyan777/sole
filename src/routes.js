@@ -8,7 +8,9 @@ import AdminPanelFirebase from "./components/AdminPanelFirebase";
 import LoginForm from "./components/LoginForm";
 import DiamondInfoPage from "./pages/DiamondInfoPage/DiamondInfoPage";
 import Footer from "./components/Footer/Footer";
-import SecretRedirect from "./components/SecretRedirect"; // ✅ Ավելացրու սա
+import SecretRedirect from "./components/SecretRedirect"; // ✅ Ավելացված է
+import ExchangeRatePage from "./pages/ExchangeRate/ExchangeRate"; 
+import GoldCalculator from "./pages/GoldCalculator/GoldCalculator";
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
@@ -19,12 +21,38 @@ export const getRoutes = (user) => [
     element={
       <>
         <Header />
-        <SecretRedirect /> {/* ✅ Ավելացված է այստեղ */}
+        <SecretRedirect /> {/* ✅ Ավելացված է */}
         <MenuPage />
         <Footer />
       </>
     }
   />,
+  <Route
+  key="/exchange-rate"
+  path="/exchange-rate"
+  element={
+    <>
+      <Header />
+      <SecretRedirect />
+      <ExchangeRatePage />
+      <Footer />
+    </>
+  }
+/>,
+<Route
+  key="/gold-calculator"
+  path="/gold-calculator"
+  element={
+    <>
+      <Header />
+      <SecretRedirect />
+      <GoldCalculator />
+      <Footer />
+    </>
+  }
+/>,
+
+
   <Route
     key="/menu"
     path="/menu"
@@ -80,6 +108,7 @@ export const getRoutes = (user) => [
       user?.email === ADMIN_EMAIL ? (
         <>
           <Header />
+          {/* Այս էջում **SecretRedirect** հատուկ պետք չի, բայց կարող ես ավելացնել եթե ցանկանաս */}
           <AdminPanelFirebase />
         </>
       ) : (

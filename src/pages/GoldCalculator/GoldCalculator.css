@@ -1,0 +1,208 @@
+/* Gold Calculator Styles */
+.gold-calculator-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-family: "Segoe UI", sans-serif;
+  }
+  
+  .gold-calculator-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  .gold-input-group,
+  .gold-select-group {
+    margin-bottom: 1rem;
+  }
+  
+  .gold-input-group label,
+  .gold-select-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #444;
+  }
+  
+  .gold-input-group input,
+  .gold-select-group select {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+  }
+  
+  .gold-calc-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background-color: #00a896; /* Tiffany-ish teal */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .gold-calc-btn:hover {
+    background-color: #028f84;
+  }
+  
+  .gold-result {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #e0f7f4;
+    border: 1px solid #00a896;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    color: #00796b;
+  }
+  
+  /* Gold Infographic Styles */
+  .gold-infographic {
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    color: #333;
+    max-width: 960px;
+    margin: 2rem auto;
+    border: 2px solid #c0f0ea;
+  }
+  
+  .gold-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 600;
+    color: #009688; /* Google Material teal */
+    margin-bottom: 1.5rem;
+  }
+  
+  .gold-section {
+    margin-bottom: 2.5rem;
+  }
+  
+  .gold-section h3 {
+    font-size: 1.5rem;
+    color: #00796b; /* Dark teal */
+    margin-bottom: 1rem;
+    border-left: 4px solid #81D8D0;
+    padding-left: 0.6rem;
+  }
+  
+  .gold-section ul {
+    list-style: disc;
+    padding-left: 1.5rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  /* Probe differences visual blocks */
+  .gold-probe-comparison {
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  
+  .gold-probe-box {
+    flex: 1 1 140px;
+    background-color: #e0f7f5;
+    border: 2px solid #81D8D0;
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(129, 216, 208, 0.4);
+    transition: transform 0.3s ease;
+    cursor: default;
+  }
+  
+  .gold-probe-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(129, 216, 208, 0.7);
+  }
+  
+  .gold-probe-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #009688;
+    margin-bottom: 0.3rem;
+    font-family: 'Segoe UI Black', 'Segoe UI', sans-serif;
+  }
+  
+  .gold-probe-percent {
+    font-size: 1.1rem;
+    color: #004d40;
+    margin-bottom: 0.5rem;
+  }
+  
+  .gold-probe-description {
+    font-size: 0.9rem;
+    color: #00695c;
+  }
+  
+  /* Table styles */
+  .gold-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+  }
+  
+  .gold-table th,
+  .gold-table td {
+    border: 1px solid #d0ebe8;
+    padding: 0.8rem;
+    text-align: center;
+  }
+  
+  .gold-table th {
+    background-color: #e0f7f5;
+    color: #00796b;
+    font-weight: 600;
+  }
+  
+  .gold-table td {
+    background-color: #f9fdfd;
+  }
+  
+  /* Responsive */
+  @media screen and (max-width: 600px) {
+    .gold-calculator-container,
+    .gold-infographic {
+      padding: 1rem;
+      margin: 1rem;
+    }
+  
+    .gold-title {
+      font-size: 1.6rem;
+    }
+  
+    .gold-section h3 {
+      font-size: 1.2rem;
+    }
+  
+    .gold-probe-comparison {
+      flex-direction: column;
+      gap: 1rem;
+    }
+  
+    .gold-probe-box {
+      flex: none;
+      width: 100%;
+    }
+  
+    .gold-table th,
+    .gold-table td {
+      font-size: 0.85rem;
+      padding: 0.5rem;
+    }
+  }
+  

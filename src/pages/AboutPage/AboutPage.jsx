@@ -6,6 +6,7 @@ const AboutPage = () => {
     <section className="about-page">
       {/* Background video */}
       <video className="background-video" autoPlay loop muted playsInline>
+     
         <source src="/videos/jewelry-bg.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>

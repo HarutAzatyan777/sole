@@ -135,6 +135,7 @@ export default function JewelleryMenuPage() {
     <source src="/videos/jewelry-bg2.mp4" type="video/mp4" />
     Ձեր դիտարկիչը չի աջակցում տեսանյութերին։
   </video>
+  
   <div className="hero-overlay">
   <div className="hero-text">
     <h1>Fashion fades, style remains</h1>

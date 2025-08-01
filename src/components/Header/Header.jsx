@@ -18,11 +18,11 @@ const Header = () => {
 
         <nav className={`navigation diamond-nav ${menuOpen ? "open" : ""}`}>
           <ul className="diamond-nav-list">
-            <li>
-              <Link to="/menu" onClick={() => setMenuOpen(false)}>
-                Menu
+            {/* <li>
+              <Link to="/exchange-rate" onClick={() => setMenuOpen(false)}>
+                EXCHANGE
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/about" onClick={() => setMenuOpen(false)}>
                 About Us
@@ -37,6 +37,12 @@ const Header = () => {
             <li>
               <Link to="/diamond-info" onClick={() => setMenuOpen(false)}>
                 Diamond Info
+              </Link>
+            </li>
+            {/* Ավելացրեցինք նոր լինգկ՝ Gold Calculator */}
+            <li>
+              <Link to="/gold-calculator" onClick={() => setMenuOpen(false)}>
+                Gold Calculator
               </Link>
             </li>
           </ul>

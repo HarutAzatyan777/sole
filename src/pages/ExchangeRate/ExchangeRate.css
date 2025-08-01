@@ -1,0 +1,207 @@
+/* Colors */
+:root {
+  --tiffany-blue: #0abab5; /* Tiffany blue */
+  --tiffany-light: #def2f1;
+  --gray-light: #f5f7f9;
+  --gray-dark: #344955;
+  --text-primary: #222;
+  --text-secondary: #555;
+  --border-color: #cfd8dc;
+  --hover-bg: #e0f7f9;
+  --success-color: #198754;
+}
+
+.exchange-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: var(--gray-light);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(10, 171, 181, 0.15);
+  color: var(--text-primary);
+}
+
+.exchange-header {
+  font-weight: 700;
+  font-size: 2.8rem;
+  color: var(--tiffany-blue);
+  text-align: center;
+  margin-bottom: 1rem;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+.exchange-info {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0.3rem 0;
+  text-align: center;
+}
+
+.base-selector {
+  margin: 1.5rem 0 2.5rem;
+  text-align: center;
+}
+
+.base-selector label {
+  font-weight: 600;
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  color: var(--gray-dark);
+}
+
+.base-selector select {
+  font-size: 1rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  border: 1.8px solid var(--border-color);
+  transition: border-color 0.3s ease;
+  font-family: Roboto, Arial, sans-serif;
+  cursor: pointer;
+}
+
+.base-selector select:hover,
+.base-selector select:focus {
+  border-color: var(--tiffany-blue);
+  outline: none;
+  box-shadow: 0 0 8px rgba(10, 171, 181, 0.4);
+}
+
+/* Converter block */
+.exchange-container > div:nth-child(7) {
+  background: white;
+  padding: 1.8rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(10, 171, 181, 0.12);
+  margin-bottom: 2.5rem;
+}
+
+.exchange-container > div:nth-child(7) h3 {
+  margin-bottom: 1.2rem;
+  color: var(--tiffany-blue);
+  font-weight: 700;
+  font-size: 1.5rem;
+  font-family: "Google Sans", Roboto, sans-serif;
+}
+
+.exchange-container > div:nth-child(7) div {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.exchange-container > div:nth-child(7) input[type="number"],
+.exchange-container > div:nth-child(7) select {
+  padding: 0.55rem 0.8rem;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  border: 2px solid var(--border-color);
+  font-family: Roboto, Arial, sans-serif;
+  transition: border-color 0.3s ease;
+  min-width: 110px;
+  cursor: pointer;
+  box-shadow: none;
+  appearance: none;
+}
+
+.exchange-container > div:nth-child(7) input[type="number"]:hover,
+.exchange-container > div:nth-child(7) input[type="number"]:focus,
+.exchange-container > div:nth-child(7) select:hover,
+.exchange-container > div:nth-child(7) select:focus {
+  border-color: var(--tiffany-blue);
+  outline: none;
+  box-shadow: 0 0 10px rgba(10, 171, 181, 0.4);
+}
+
+.exchange-container > div:nth-child(7) span {
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--gray-dark);
+  user-select: none;
+}
+
+.exchange-container > div:nth-child(7) p {
+  margin-top: 1.1rem;
+  font-weight: 700;
+  font-size: 1.35rem;
+  text-align: center;
+  color: var(--success-color);
+  font-family: "Google Sans", Roboto, sans-serif;
+}
+
+/* Table wrapper */
+.table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: inset 0 0 5px #cfd8dc;
+  background: white;
+}
+
+/* Currency table */
+.currency-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Roboto, Arial, sans-serif;
+}
+
+.currency-table thead {
+  background-color: var(--tiffany-blue);
+  color: white;
+  font-weight: 700;
+}
+
+.currency-table th,
+.currency-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+  font-size: 1rem;
+}
+
+.currency-table tbody tr:hover {
+  background-color: var(--hover-bg);
+  cursor: default;
+}
+
+/* Links */
+.links {
+  margin-top: 2.2rem;
+  text-align: center;
+  font-family: Roboto, Arial, sans-serif;
+}
+
+.links a {
+  margin: 0 1rem;
+  color: var(--tiffany-blue);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.links a:hover {
+  color: #087575;
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .exchange-container {
+    padding: 1rem;
+  }
+
+  .exchange-container > div:nth-child(7) div {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .base-selector select,
+  .exchange-container > div:nth-child(7) input[type="number"],
+  .exchange-container > div:nth-child(7) select {
+    width: 100%;
+    min-width: auto;
+  }
+}
