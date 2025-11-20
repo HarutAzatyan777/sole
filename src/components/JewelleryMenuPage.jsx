@@ -131,10 +131,15 @@ export default function JewelleryMenuPage() {
     <div className="jewellery-menu-page">
       {/* HERO VIDEO SECTION */}
       <section className="hero-video-section" id="heroSection">
-  <video autoPlay muted loop playsInline className="hero-video">
-    <source src="/videos/jewelry-bg2.mp4" type="video/mp4" />
+  {/* <video autoPlay muted loop playsInline className="hero-video">
+    <source src="/videos/jewelry-bg2.webp" type="video/mp4" />
     Ձեր դիտարկիչը չի աջակցում տեսանյութերին։
-  </video>
+  </video> */}
+  <img 
+  src="/videos/jewelry-bg2.webp" 
+  alt="Jewelry background"
+  className="hero-video"
+/>
   
   <div className="hero-overlay">
   <div className="hero-text">

@@ -1,6 +1,7 @@
 import React from "react";
 import "./DiamondInfoPage.css";
 import diamondVideo from "../../assets/diamond-video.mp4";
+import diamondVideo1 from "../../assets/diamond-video1.mp4";
 import DiamondSvg from "./DiamondSvg";
 import DiamondClaritySvg from "./DiamondClaritySvg";
 
@@ -45,58 +46,113 @@ const DiamondInfoPage = () => {
         <video autoPlay muted loop playsInline src={diamondVideo} type="video/mp4">
           Ձեր դիտարկիչը չի աջակցում video tag-ին։
         </video>
+     
         <div className="video-overlay-text">
           <h1>Sole Diamond</h1>
         </div>
       </section>
+      <div className="story-video-container">
+      <div className="story-text">
+  <h2>Ինչպես գտնել ձեր իդեալական տաշվածքի փայլը</h2>
+
+  <ol>
+    <li>
+      <strong>Քայլ 1․ Կտրումի ընտրություն —</strong>  
+      Սա ձեր քարի «բնավորությունն» է։  
+      Round-ը տալիս է դասական փայլ, Princess-ը՝ համարձակություն,  
+      իսկ Emerald-ը՝ թագավորական հանգիստ շողք։
+    </li>
+
+    <li>
+      <strong>Քայլ 2․ Գույն և պարզություն —</strong>  
+      Ընտրեք գույն, որն ամբողջացնում է ձեր ձեռքի տոնը,  
+      և պարզություն, որը թույլ է տալիս լույսին ազատ խաղալ  
+      ամեն մի մակերեսի վրա։
+    </li>
+
+    <li>
+      <strong>Քայլ 3․ Չափսի և համամասնությունների հավասարակշռություն —</strong>  
+      Ավելի մեծը միշտ չի նշանակում ավելի գեղեցիկ։  
+      Լավ հավասարակշռված չափսը ստեղծում է կատարյալ հոլովույթ  
+      և նուրբ, ներդաշնակ փայլ։
+    </li>
+
+    <li>
+      <strong>Քայլ 4․ Փորձեք, դիտեք, զգացեք —</strong>  
+      Տարբեր տաշվածքներ դիտելիս հետևեք, թե որ մեկը ձեզ «կոչ է անում»։  
+      Ձեր իդեալական քարը միշտ իրեն զգացնել է տալիս։
+    </li>
+  </ol>
+</div>
+
+
+  <div className="story-video">
+    <video
+      autoPlay
+      muted
+      loop
+      playsInline
+      src={diamondVideo1}
+      type="video/mp4"
+      className="diamond-video1"
+    >
+      Ձեր դիտարկիչը չի աջակցում video tag-ին։
+    </video>
+  </div>
+</div>
 
       <div className="diamond-info-container">
-        <section className="info-section">
-          {/* Գույնի բաժին */}
-          <div className="info-box">
-            <h2>Գույնը</h2>
-            <p>
-              Ադամանդի գույնը չափվում է D-ից մինչև Z աստիճան, որտեղ D-ն ամենանախանձելի անգույնն է, իսկ Z-ն արդեն նկատելի դեղնավուն երանգ ունի։
-            </p>
-            {diamondColors.map(({ colorName, description, colorCode }) => (
-              <div key={colorName} className="color-card">
-                <DiamondSvg color={colorCode} />
-                <div className="color-name">{colorName}</div>
-                <div className="color-description">{description}</div>
-              </div>
-            ))}
-          </div>
 
-          {/* Որակի բաժին */}
-          <div className="info-box">
-            <h2>Որակը</h2>
-            <p>
-              Ադամանդի որակը գնահատվում է ներքին և արտաքին թերությունների (կլարիթի) հիման վրա՝ FL-ից մինչև I և այլն։
-            </p>
-            {diamondQualities.map(({ grade, description }) => (
-              <div key={grade} className="clarity-card">
-                <DiamondClaritySvg clarity={grade} />
-                <div className="clarity-grade">{grade}</div>
-                <div className="clarity-description">{description}</div>
-              </div>
-            ))}
-          </div>
+  <section className="info-section">
+    {/* Գույնի բաժին */}
+    <div className="info-box">
+      <h2>Գույնը</h2>
+      <p>
+        Ադամանդի գույնը չափվում է D-ից մինչև Z աստիճան, որտեղ D-ն ամենանախանձելի
+        անգույնն է, իսկ Z-ն արդեն նկատելի դեղնավուն երանգ ունի։
+      </p>
+      {diamondColors.map(({ colorName, description, colorCode }) => (
+        <div key={colorName} className="color-card">
+          <DiamondSvg color={colorCode} />
+          <div className="color-name">{colorName}</div>
+          <div className="color-description">{description}</div>
+        </div>
+      ))}
+    </div>
 
-          {/* Տաշվածքի բաժին */}
-          <div className="info-box">
-            <h2>Տաշվածքը (Cut)</h2>
-            <p>
-              Տաշվածքը որոշում է, թե ինչպես է ադամանդը ճառագայթում լույսը, և այն մեծ ազդեցություն ունի ադամանդի գեղեցկության և փայլի վրա։
-            </p>
-            {diamondCuts.map(({ cutName, description }) => (
-              <div key={cutName} className="cut-card">
-                <div className="cut-name">{cutName}</div>
-                <div className="cut-description">{description}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-      </div>
+    {/* Որակի բաժին */}
+    <div className="info-box">
+      <h2>Որակը</h2>
+      <p>
+        Ադամանդի որակը գնահատվում է ներքին և արտաքին թերությունների (կլարիթի)
+        հիման վրա՝ FL-ից մինչև I և այլն։
+      </p>
+      {diamondQualities.map(({ grade, description }) => (
+        <div key={grade} className="clarity-card">
+          <DiamondClaritySvg clarity={grade} />
+          <div className="clarity-grade">{grade}</div>
+          <div className="clarity-description">{description}</div>
+        </div>
+      ))}
+    </div>
+
+    {/* Տաշվածքի բաժին */}
+    <div className="info-box">
+      <h2>Տաշվածքը (Cut)</h2>
+      <p>
+        Տաշվածքը որոշում է, թե ինչպես է ադամանդը ճառագայթում լույսը, և այն մեծ
+        ազդեցություն ունի ադամանդի գեղեցկության և փայլի վրա։
+      </p>
+      {diamondCuts.map(({ cutName, description }) => (
+        <div key={cutName} className="cut-card">
+          <div className="cut-name">{cutName}</div>
+          <div className="cut-description">{description}</div>
+        </div>
+      ))}
+    </div>
+  </section>
+</div>
+
     </div>
   );
 };
