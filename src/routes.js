@@ -8,9 +8,14 @@ import AdminPanelFirebase from "./components/AdminPanelFirebase";
 import LoginForm from "./components/LoginForm";
 import DiamondInfoPage from "./pages/DiamondInfoPage/DiamondInfoPage";
 import Footer from "./components/Footer/Footer";
-import SecretRedirect from "./components/SecretRedirect"; // ✅ Ավելացված է
-import ExchangeRatePage from "./pages/ExchangeRate/ExchangeRate"; 
+import SecretRedirect from "./components/SecretRedirect";
+import ExchangeRatePage from "./pages/ExchangeRate/ExchangeRate";
 import GoldCalculator from "./pages/GoldCalculator/GoldCalculator";
+
+// BLOG IMPORTS
+import BlogAdmin from "./components/BlogAdmin/BlogAdmin";
+import BlogPublic from "./components/BlogPublic/BlogPublic";
+import BlogPost from "./components/BlogPublic/BlogPost";
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
@@ -21,37 +26,38 @@ export const getRoutes = (user) => [
     element={
       <>
         <Header />
-        <SecretRedirect /> {/* ✅ Ավելացված է */}
+        <SecretRedirect />
         <MenuPage />
         <Footer />
       </>
     }
   />,
-  <Route
-  key="/exchange-rate"
-  path="/exchange-rate"
-  element={
-    <>
-      <Header />
-      <SecretRedirect />
-      <ExchangeRatePage />
-      <Footer />
-    </>
-  }
-/>,
-<Route
-  key="/gold-calculator"
-  path="/gold-calculator"
-  element={
-    <>
-      <Header />
-      <SecretRedirect />
-      <GoldCalculator />
-      <Footer />
-    </>
-  }
-/>,
 
+  <Route
+    key="/exchange-rate"
+    path="/exchange-rate"
+    element={
+      <>
+        <Header />
+        <SecretRedirect />
+        <ExchangeRatePage />
+        <Footer />
+      </>
+    }
+  />,
+
+  <Route
+    key="/gold-calculator"
+    path="/gold-calculator"
+    element={
+      <>
+        <Header />
+        <SecretRedirect />
+        <GoldCalculator />
+        <Footer />
+      </>
+    }
+  />,
 
   <Route
     key="/menu"
@@ -65,6 +71,7 @@ export const getRoutes = (user) => [
       </>
     }
   />,
+
   <Route
     key="/about"
     path="/about"
@@ -77,6 +84,7 @@ export const getRoutes = (user) => [
       </>
     }
   />,
+
   <Route
     key="/diamond-info"
     path="/diamond-info"
@@ -89,6 +97,7 @@ export const getRoutes = (user) => [
       </>
     }
   />,
+
   <Route
     key="/contact"
     path="/contact"
@@ -101,6 +110,10 @@ export const getRoutes = (user) => [
       </>
     }
   />,
+
+  // -------------------------
+  // 📌 ADMIN PANEL (MAIN)
+  // -------------------------
   <Route
     key="/admin"
     path="/admin"
@@ -108,7 +121,6 @@ export const getRoutes = (user) => [
       user?.email === ADMIN_EMAIL ? (
         <>
           <Header />
-          {/* Այս էջում **SecretRedirect** հատուկ պետք չի, բայց կարող ես ավելացնել եթե ցանկանաս */}
           <AdminPanelFirebase />
         </>
       ) : (
@@ -120,5 +132,55 @@ export const getRoutes = (user) => [
       )
     }
   />,
+
+  // -------------------------
+  // 📌 BLOG ADMIN (secured)
+  // -------------------------
+  <Route
+    key="/admin-blog"
+    path="/admin-blog"
+    element={
+      user?.email === ADMIN_EMAIL ? (
+        <>
+          <Header />
+          <BlogAdmin />
+        </>
+      ) : (
+        <>
+          <Header />
+          <LoginForm />
+          <Footer />
+        </>
+      )
+    }
+  />,
+
+  // -------------------------
+  // 📌 PUBLIC BLOG
+  // -------------------------
+  <Route
+    key="/blog"
+    path="/blog"
+    element={
+      <>
+        <Header />
+        <BlogPublic />
+        <Footer />
+      </>
+    }
+  />,
+
+  <Route
+    key="/blog-post"
+    path="/blog/:id"
+    element={
+      <>
+        <Header />
+        <BlogPost />
+        <Footer />
+      </>
+    }
+  />,
+
   <Route key="*" path="*" element={<Navigate to="/" />} />,
 ];
