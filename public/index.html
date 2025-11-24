@@ -57,7 +57,7 @@
       rel="stylesheet"
     />
 
-    <!-- JSON-LD Structured Data (2025 Best Practice) -->
+    <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -78,6 +78,16 @@
         "https://facebook.com/solejewels"
       ]
     }
+    </script>
+
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MPC29P63H"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-9MPC29P63H', { send_page_view: false }); 
+      // SPA նախագծերի համար send_page_view=false. React կոմպոնենտից ավտո page_view կուղարկվի
     </script>
   </head>
 

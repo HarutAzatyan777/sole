@@ -5,8 +5,8 @@
   max-width: 900px;
   margin: 2rem auto;
   padding: 1.5rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.7;
+  font-family: "Playfair Display", Georgia, serif;
+
   color: #222;
   background-color: #fff;
   border-radius: 12px;
@@ -38,6 +38,7 @@
   font-weight: 700;
   margin-bottom: 0.5rem;
   color: #111;
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 /* ==============================
@@ -47,6 +48,7 @@
   font-size: 0.9rem;
   color: #666;
   margin-bottom: 1.5rem;
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 /* ==============================
@@ -55,6 +57,7 @@
 .blogpost-content {
   font-size: 1rem;
   color: #333;
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 /* Paragraphs */
@@ -71,6 +74,7 @@
   font-weight: 600;
   color: #222;
   line-height: 1.3;
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 /* Links inside content */
@@ -94,6 +98,7 @@
   margin: 1.5rem 0;
   background-color: #f9f9f9;
   border-radius: 6px;
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 /* Lists */
@@ -102,6 +107,7 @@
   margin-left: 1.5rem;
   margin-bottom: 1rem;
   padding-left: 1rem;
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 /* Code blocks */
@@ -111,6 +117,7 @@
   border-radius: 8px;
   overflow-x: auto;
   margin: 1.5rem 0;
+  font-family: 'Courier New', Courier, monospace; /* Code block stays monospace */
 }
 
 .blogpost-content code {
@@ -171,9 +178,7 @@
   transform: scale(1.03);
 }
 
-/* ==============================
-   Responsive for smaller screens
-============================== */
+/* Responsive */
 @media (max-width: 768px) {
   .size .blogpost-content img,
   .content-img,
@@ -185,9 +190,7 @@
   }
 }
 
-/* ==============================
-   Loading & Not Found
-============================== */
+/* Loading & Not Found */
 .blogpost-loading,
 .blogpost-notfound {
   text-align: center;
@@ -196,13 +199,12 @@
   margin: 2rem 0;
 }
 
-/* ==============================
-   Markdown Tables
-============================== */
+/* Markdown Tables */
 .blogpost-content table {
   border-collapse: collapse;
   width: 100%;
   margin: 1.5rem 0;
+  font-family: "Playfair Display", Georgia, serif;
 }
 
 .blogpost-content th,
@@ -217,9 +219,7 @@
   font-weight: 600;
 }
 
-/* ==============================
-   Horizontal Rules
-============================== */
+/* Horizontal Rules */
 .blogpost-content hr {
   border: none;
   border-top: 1px solid #ddd;
