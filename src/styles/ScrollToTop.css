@@ -3,7 +3,7 @@
 .scroll-to-top {
     position: fixed;
     bottom: 40px;
-    right: 40px;
+    left: 40px;
     background-color: #a0d8d365; /* Քո ցանկալի ֆոն */
     color: #ffffff;
     border: none;
