@@ -1,0 +1,74 @@
+.md-editor-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .md-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .md-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .md-toolbar button {
+    padding: 5px 8px;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #7fb0aa;
+    color: #fff;
+    transition: 0.2s;
+  }
+  
+  .md-toolbar button:hover {
+    background-color: #67938a;
+  }
+  
+  .md-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+  }
+  
+  .md-preview {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 6px;
+    background-color: #fafafa;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .md-preview img {
+    max-width: 100%;
+    display: block;
+    margin: 5px 0;
+    border-radius: 4px;
+  }
+  
+  .md-preview h1, .md-preview h2, .md-preview h3 {
+    margin: 5px 0;
+    font-weight: 600;
+  }
+  
+  .md-preview pre {
+    background-color: #f0f0f0;
+    padding: 6px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 13px;
+  }
+  

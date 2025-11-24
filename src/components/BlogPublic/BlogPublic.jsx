@@ -1,4 +1,3 @@
-// ./components/BlogPublic/BlogPublic.jsx
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
@@ -10,9 +9,9 @@ const BlogPublic = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let isMounted = true; // ✅ strict mode safe
     const fetchPosts = async () => {
       try {
-        // Query only published posts, ordered by createdAt descending
         const q = query(
           collection(db, "blogPosts"),
           where("published", "==", true),
@@ -28,22 +27,21 @@ const BlogPublic = () => {
             ? new Date(d.date)
             : null;
 
-          return {
-            id: doc.id,
-            ...d,
-            createdAt,
-          };
+          return { id: doc.id, ...d, createdAt };
         });
 
-        setPosts(data);
+        if (isMounted) setPosts(data); // ✅ only update state if component is mounted
       } catch (err) {
         console.error("Error loading public blog:", err);
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     fetchPosts();
+    return () => {
+      isMounted = false; // cleanup to prevent state updates after unmount
+    };
   }, []);
 
   if (loading) return <div className="blog-loading">Loading…</div>;
@@ -52,7 +50,6 @@ const BlogPublic = () => {
   return (
     <div className="blog-public-container">
       <h1 className="blog-title">Blog</h1>
-
       <div className="blog-grid">
         {posts.map((post) => (
           <BlogCard key={post.id} post={post} />
@@ -62,11 +59,8 @@ const BlogPublic = () => {
   );
 };
 
-// Separate BlogCard component for modularity
 const BlogCard = ({ post }) => {
-  const snippet =
-    post.excerpt || (post.content ? post.content.slice(0, 130) + "..." : "");
-
+  const snippet = post.excerpt || (post.content ? post.content.slice(0, 130) + "..." : "");
   const formattedDate = post.createdAt
     ? post.createdAt.toLocaleDateString("hy-AM", {
         year: "numeric",
@@ -80,7 +74,7 @@ const BlogCard = ({ post }) => {
       {post.img && (
         <img
           src={post.img}
-          alt={post.title}
+          alt={post.title || "Blog image"} // ✅ always provide alt
           className="blog-public-thumb"
           loading="lazy"
         />

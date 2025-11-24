@@ -5,11 +5,12 @@ function JewelleryCard({ item, onOpenGallery }) {
   // Միայն նկարներն ենք օգտագործում այստեղ
   const media = useMemo(() => {
     const images = item.imageUrls || [];
-    return images; // միայն նկարներ
+    return images;
   }, [item.imageUrls]);
 
   const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [isScaling, setIsScaling] = useState(false);
+
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
   const intervalRef = useRef(null);
@@ -69,9 +70,18 @@ function JewelleryCard({ item, onOpenGallery }) {
       className="jewellery-card"
       tabIndex={0}
       role="button"
-      onClick={() => onOpenGallery([... (item.imageUrls || []), ...(item.videoUrls || [])])} // Modal-ին տալիս ենք ամբողջ media
+      onClick={() =>
+        onOpenGallery([
+          ...(item.imageUrls || []),
+          ...(item.videoUrls || []),
+        ])
+      }
       onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") onOpenGallery([... (item.imageUrls || []), ...(item.videoUrls || [])]);
+        if (e.key === "Enter" || e.key === " ")
+          onOpenGallery([
+            ...(item.imageUrls || []),
+            ...(item.videoUrls || []),
+          ]);
       }}
       aria-label={`${item.nameEn || item.nameHy} - ${item.price} $`}
     >
@@ -103,6 +113,7 @@ function JewelleryCard({ item, onOpenGallery }) {
             >
               ‹
             </button>
+
             <button
               className="arrow next"
               onClick={(e) => {
@@ -112,6 +123,7 @@ function JewelleryCard({ item, onOpenGallery }) {
             >
               ›
             </button>
+
             <div className="image-dots">
               {media.map((_, idx) => (
                 <div
@@ -130,6 +142,7 @@ function JewelleryCard({ item, onOpenGallery }) {
 
       <div className="jewellery-info">
         <h3>{item.nameEn || item.nameHy}</h3>
+
         <div className="jewellery-params">
           {item.params?.code && <p>Կոդ՝ {item.params.code}</p>}
           {item.params?.weight && <p>Քաշ՝ {item.params.weight} գ</p>}
@@ -138,6 +151,7 @@ function JewelleryCard({ item, onOpenGallery }) {
           {item.params?.metal && <p>Մետաղ՝ {item.params.metal}</p>}
           {item.params?.stone && <p>Քար՝ {item.params.stone}</p>}
         </div>
+
         <div className="jewellery-price">{item.price} $</div>
       </div>
     </div>

@@ -12,6 +12,10 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import "./BlogAdmin.css";
+import MarkdownEditor from "./MarkdownEditor";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
 
 export default function BlogAdmin() {
   const [title, setTitle] = useState("");
@@ -19,6 +23,7 @@ export default function BlogAdmin() {
   const [content, setContent] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [published, setPublished] = useState(false);
+  
 
 
   const [loading, setLoading] = useState(false);
@@ -150,7 +155,7 @@ export default function BlogAdmin() {
         <textarea rows="3" placeholder="Short preview text..." value={excerpt} onChange={(e) => setExcerpt(e.target.value)} required />
 
         <label>Content *</label>
-        <textarea rows="8" placeholder="Full article content..." value={content} onChange={(e) => setContent(e.target.value)} required />
+<MarkdownEditor value={content} onChange={setContent} />
 
         <label>Main Image URL (optional)</label>
         <input type="text" placeholder="https://example.com/image.jpg" value={imageURL} onChange={(e) => setImageURL(e.target.value)} />
@@ -245,17 +250,22 @@ export default function BlogAdmin() {
           )}
         </td>
 
-        <td>
-          {isEditing ? (
-            <textarea
-              rows="4"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-          ) : (
-            post.content
-          )}
-        </td>
+        <td style={{ minWidth: "180px", maxWidth: "400px", width: "auto" }}>
+  {isEditing ? (
+    <textarea
+      rows="4"
+      value={content}
+      onChange={(e) => setContent(e.target.value)}
+    />
+  ) : (
+    <div className="ba-markdown-preview">
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {post.content || "No content provided."}
+      </ReactMarkdown>
+    </div>
+  )}
+</td>
+
 
         <td>
           {isEditing ? (
@@ -300,7 +310,6 @@ export default function BlogAdmin() {
               </button>
               <button
                 onClick={() => {
-                  // Cancel editing: վերադարձնում նախնական արժեքները
                   setEditId(null);
                   setTitle("");
                   setExcerpt("");
@@ -336,6 +345,7 @@ export default function BlogAdmin() {
     );
   })}
 </tbody>
+
 
       </table>
       

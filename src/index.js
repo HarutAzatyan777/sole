@@ -10,9 +10,9 @@ const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container); // ⬅️ React 18 մեթոդ
 
 root.render(
-  <React.StrictMode>
+ 
     <App />
-  </React.StrictMode>
+  
 );
 
 reportWebVitals(sendToVercelAnalytics);

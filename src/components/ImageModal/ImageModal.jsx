@@ -4,47 +4,44 @@ import "./ImageModal.css";
 export default function ImageModal({ images, currentIndex, onClose, onNext, onPrev, item }) {
   const overlayRef = useRef(null);
   const imageRef = useRef(null);
+
   const [isZoomed, setIsZoomed] = useState(false);
   const [transformOrigin, setTransformOrigin] = useState("center center");
   const [showTouchIcon, setShowTouchIcon] = useState(true);
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
   const [dragStart, setDragStart] = useState(null);
 
-  let touchStartX = 0;
-  let touchEndX = 0;
+  // FIXED: instead of let touchStartX / touchEndX
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
 
-  // Ստուգում է թե վիդեո՞ է (mp4, webm, ogg)
   const isVideo = (url) => /\.(mp4|webm|ogg)$/i.test(url);
 
-  // Ստուգում է YouTube URL
   const isYouTube = (url) =>
     url.includes("youtube.com") || url.includes("youtu.be");
 
-  // YouTube URL-ն վերածում embed տեսքի
   const transformYoutubeUrlToEmbed = (url) => {
     try {
       const parsedUrl = new URL(url);
       let videoId = null;
-  
-      if (parsedUrl.hostname.includes('youtu.be')) {
+
+      if (parsedUrl.hostname.includes("youtu.be")) {
         videoId = parsedUrl.pathname.slice(1);
-      } else if (parsedUrl.hostname.includes('youtube.com')) {
-        if (parsedUrl.pathname.startsWith('/shorts/')) {
-          videoId = parsedUrl.pathname.split('/')[2]; // получаем ID после /shorts/
+      } else if (parsedUrl.hostname.includes("youtube.com")) {
+        if (parsedUrl.pathname.startsWith("/shorts/")) {
+          videoId = parsedUrl.pathname.split("/")[2];
         } else {
-          videoId = parsedUrl.searchParams.get('v');
+          videoId = parsedUrl.searchParams.get("v");
         }
       }
-  
+
       if (videoId) {
         return `https://www.youtube.com/embed/${videoId}`;
       }
-    } catch {
-      // fallback
-    }
+    } catch {}
+
     return url;
   };
-  
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -54,28 +51,33 @@ export default function ImageModal({ images, currentIndex, onClose, onNext, onPr
     };
 
     const handleTouchStart = (e) => {
-      touchStartX = e.changedTouches[0].screenX;
+      touchStartX.current = e.changedTouches[0].screenX;
     };
 
     const handleTouchEnd = (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      const diff = touchStartX - touchEndX;
+      touchEndX.current = e.changedTouches[0].screenX;
+
+      const diff = touchStartX.current - touchEndX.current;
       const threshold = 50;
+
       if (Math.abs(diff) > threshold) {
         diff > 0 ? onNext() : onPrev();
       }
     };
 
     const overlay = overlayRef.current;
+
     overlay.addEventListener("touchstart", handleTouchStart);
     overlay.addEventListener("touchend", handleTouchEnd);
     window.addEventListener("keydown", handleKeyDown);
+
     document.body.style.overflow = "hidden";
 
     return () => {
       overlay.removeEventListener("touchstart", handleTouchStart);
       overlay.removeEventListener("touchend", handleTouchEnd);
       window.removeEventListener("keydown", handleKeyDown);
+
       document.body.style.overflow = "auto";
     };
   }, [onClose, onNext, onPrev]);
@@ -119,38 +121,49 @@ export default function ImageModal({ images, currentIndex, onClose, onNext, onPr
   return (
     <div className="image-modal-overlay" ref={overlayRef}>
       <div className="image-modal-content">
-        <button className="close-button" onClick={onClose} aria-label="Փակել">✕</button>
+        <button className="close-button" onClick={onClose} aria-label="Փակել">
+          ✕
+        </button>
 
         <div className="image-container modal-image-container">
-          <button className="nav-button prev" onClick={onPrev} aria-label="Նախորդ" disabled={isZoomed}>←</button>
+          <button
+            className="nav-button prev"
+            onClick={onPrev}
+            disabled={isZoomed}
+          >
+            ←
+          </button>
 
           {isVideo(currentMedia) ? (
-  <video
-    src={currentMedia}
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="modal-video"
-    style={{ width: "100%", height: "100%", objectFit: "contain" }}
-    onClick={handleImageClick}
-    onMouseDown={handleMouseDown}
-    onMouseMove={handleMouseMove}
-    onMouseUp={handleMouseUp}
-    onMouseLeave={handleMouseUp}
-    draggable={false}
-    controls={false} // <<< controls հեռացված
-  />
-) : isYouTube(currentMedia) ? (
-  <iframe
-    src={transformYoutubeUrlToEmbed(currentMedia) + "?autoplay=1&loop=1&controls=0&mute=1&playlist=" + transformYoutubeUrlToEmbed(currentMedia).split("/").pop()}
-    title="YouTube Video"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    allowFullScreen
-    className="modal-video"
-    style={{ width: "100%", height: "100%", border: "none" }}
-  />
-) : (
+            <video
+              src={currentMedia}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="modal-video"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              onClick={handleImageClick}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              draggable={false}
+              controls={false}
+            />
+          ) : isYouTube(currentMedia) ? (
+            <iframe
+              src={
+                transformYoutubeUrlToEmbed(currentMedia) +
+                "?autoplay=1&loop=1&controls=0&mute=1"
+              }
+              title="YouTube Video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="modal-video"
+              style={{ width: "100%", height: "100%", border: "none" }}
+            />
+          ) : (
             <img
               ref={imageRef}
               src={currentMedia}
@@ -163,7 +176,7 @@ export default function ImageModal({ images, currentIndex, onClose, onNext, onPr
                   : "scale(1)",
                 cursor: isZoomed
                   ? "grab"
-                  : 'url("/zoom-in.png") 24 24, zoom-in'
+                  : 'url("/zoom-in.png") 24 24, zoom-in',
               }}
               loading="lazy"
               onClick={handleImageClick}
@@ -176,21 +189,53 @@ export default function ImageModal({ images, currentIndex, onClose, onNext, onPr
           )}
 
           {showTouchIcon && !isZoomed && !isVideo(currentMedia) && (
-            <img src="/zoom-in.png" alt="Zoom icon" className="zoom-hint-icon" />
+            <img
+              src="/zoom-in.png"
+              alt="Zoom icon"
+              className="zoom-hint-icon"
+            />
           )}
 
-          <button className="nav-button next" onClick={onNext} aria-label="Հաջորդ" disabled={isZoomed}>→</button>
+          <button
+            className="nav-button next"
+            onClick={onNext}
+            disabled={isZoomed}
+          >
+            →
+          </button>
         </div>
 
         {item && (
           <div className="modal-info">
             <h2>{item.nameEn || item.nameHy}</h2>
-            <p><strong>Գին:</strong> {item.price} AMD</p>
-            {item.params?.weight && <p><strong>Քաշ:</strong> {item.params.weight} գ</p>}
-            {item.params?.size && <p><strong>Չափս:</strong> {item.params.size}</p>}
-            {item.params?.type && <p><strong>Տեսակ:</strong> {item.params.type}</p>}
-            {item.params?.metal && <p><strong>Մետաղ:</strong> {item.params.metal}</p>}
-            {item.params?.stone && <p><strong>Քար:</strong> {item.params.stone}</p>}
+            <p>
+              <strong>Գին:</strong> {item.price} AMD
+            </p>
+            {item.params?.weight && (
+              <p>
+                <strong>Քաշ:</strong> {item.params.weight} գ
+              </p>
+            )}
+            {item.params?.size && (
+              <p>
+                <strong>Չափս:</strong> {item.params.size}
+              </p>
+            )}
+            {item.params?.type && (
+              <p>
+                <strong>Տեսակ:</strong> {item.params.type}
+              </p>
+            )}
+            {item.params?.metal && (
+              <p>
+                <strong>Մետաղ:</strong> {item.params.metal}
+              </p>
+            )}
+            {item.params?.stone && (
+              <p>
+                <strong>Քար:</strong> {item.params.stone}
+              </p>
+            )}
           </div>
         )}
 

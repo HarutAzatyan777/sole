@@ -1,3 +1,4 @@
+// ./components/Header/Header.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
@@ -18,11 +19,6 @@ const Header = () => {
 
         <nav className={`navigation diamond-nav ${menuOpen ? "open" : ""}`}>
           <ul className="diamond-nav-list">
-            {/* <li>
-              <Link to="/exchange-rate" onClick={() => setMenuOpen(false)}>
-                EXCHANGE
-              </Link>
-            </li> */}
             <li>
               <Link to="/about" onClick={() => setMenuOpen(false)}>
                 About Us
@@ -33,16 +29,24 @@ const Header = () => {
                 Contact
               </Link>
             </li>
-            {/* Ավելացրեցինք նոր լինգկ՝ Diamond Info */}
             <li>
               <Link to="/diamond-info" onClick={() => setMenuOpen(false)}>
                 Diamond Info
               </Link>
             </li>
-            {/* Ավելացրեցինք նոր լինգկ՝ Gold Calculator */}
             <li>
               <Link to="/gold-calculator" onClick={() => setMenuOpen(false)}>
                 Gold Calculator
+              </Link>
+            </li>
+            {/* Նոր Blog Link / Button */}
+            <li>
+              <Link
+                to="/blog"
+                className="blog-button"
+                onClick={() => setMenuOpen(false)}
+              >
+                Blog
               </Link>
             </li>
           </ul>
