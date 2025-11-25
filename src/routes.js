@@ -171,16 +171,16 @@ export const getRoutes = (user) => [
   />,
 
   <Route
-    key="/blog-post"
-    path="/blog/:id"
-    element={
-      <>
-        <Header />
-        <BlogPost />
-        <Footer />
-      </>
-    }
-  />,
+  key="/blog-post"
+  path="/blog/:slug"
+  element={
+    <>
+      <Header />
+      <BlogPost />
+      <Footer />
+    </>
+  }
+/>,
 
   <Route key="*" path="*" element={<Navigate to="/" />} />,
 ];

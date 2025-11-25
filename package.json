@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && node generate-sitemap.js && node generate-robots.js && node generate-rss.js",
+    "build": "react-scripts build  && node generate-robots.js",
     "seo": "node generate-sitemap.js && node generate-robots.js && node generate-rss.js",
     "sitemap": "node generate-sitemap.js",
     "test": "react-scripts test",
