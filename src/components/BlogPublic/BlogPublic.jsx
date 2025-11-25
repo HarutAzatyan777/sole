@@ -1,71 +1,153 @@
-import React, { useEffect, useState } from "react";
+// ./components/BlogPublic/BlogPublic.jsx
+import React, { useEffect, useState, useCallback } from "react";
 import { db } from "../../firebase";
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  limit,
+  startAfter,
+  getDocs
+} from "firebase/firestore";
 import { Link } from "react-router-dom";
 import "./BlogPublic.css";
+
+const PAGE_SIZE = 6; // Number of posts per page
 
 const BlogPublic = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("all");
 
+  const fetchPosts = useCallback(async () => {
+    if (!hasMore) return;
+
+    try {
+      if (lastDoc === "end") return;
+
+      const q = query(
+        collection(db, "blogPosts"),
+        where("published", "==", true),
+        ...(category !== "all" ? [where("category", "==", category)] : []),
+        orderBy("createdAt", "desc"),
+        limit(PAGE_SIZE),
+        ...(lastDoc ? [startAfter(lastDoc)] : [])
+      );
+
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        setHasMore(false);
+        setLastDoc("end");
+        return;
+      }
+
+      const newPosts = snapshot.docs.map((doc) => {
+        const d = doc.data();
+        const createdAt = d.createdAt?.seconds
+          ? new Date(d.createdAt.seconds * 1000)
+          : d.date
+          ? new Date(d.date)
+          : null;
+        return { id: doc.id, ...d, createdAt };
+      });
+
+      setPosts((prev) => [...prev, ...newPosts]);
+      setLastDoc(snapshot.docs[snapshot.docs.length - 1]);
+    } catch (err) {
+      console.error("Error fetching posts:", err);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, [lastDoc, hasMore, category]);
+
+  // Initial fetch
   useEffect(() => {
-    let isMounted = true; // ✅ strict mode safe
-    const fetchPosts = async () => {
-      try {
-        const q = query(
-          collection(db, "blogPosts"),
-          where("published", "==", true),
-          orderBy("createdAt", "desc")
-        );
+    fetchPosts();
+  }, [fetchPosts]);
 
-        const snap = await getDocs(q);
-        const data = snap.docs.map((doc) => {
-          const d = doc.data();
-          const createdAt = d.createdAt?.seconds
-            ? new Date(d.createdAt.seconds * 1000)
-            : d.date
-            ? new Date(d.date)
-            : null;
-
-          return { id: doc.id, ...d, createdAt };
-        });
-
-        if (isMounted) setPosts(data); // ✅ only update state if component is mounted
-      } catch (err) {
-        console.error("Error loading public blog:", err);
-      } finally {
-        if (isMounted) setLoading(false);
+  // Infinite scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >=
+          document.body.offsetHeight - 300 &&
+        !loadingMore &&
+        hasMore
+      ) {
+        setLoadingMore(true);
+        fetchPosts();
       }
     };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [fetchPosts, loadingMore, hasMore]);
 
-    fetchPosts();
-    return () => {
-      isMounted = false; // cleanup to prevent state updates after unmount
-    };
-  }, []);
+  // Filter/search
+  const filteredPosts = posts.filter((p) =>
+    p.title.toLowerCase().includes(search.toLowerCase())
+  );
 
-  if (loading) return <div className="blog-loading">Loading…</div>;
-  if (posts.length === 0) return <div className="blog-empty">No published posts.</div>;
+  if (loading && posts.length === 0)
+    return <div className="blog-loading">Loading…</div>;
+  if (posts.length === 0) return <div className="blog-empty">No posts yet.</div>;
 
   return (
     <div className="blog-public-container">
       <h1 className="blog-title">Blog</h1>
+
+      {/* Search & Filter */}
+      <div className="blog-filters">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="blog-search"
+        />
+        <select
+          value={category}
+          onChange={(e) => {
+            setCategory(e.target.value);
+            setPosts([]);
+            setLastDoc(null);
+            setHasMore(true);
+            setLoading(true);
+          }}
+        >
+          <option value="all">All Categories</option>
+          <option value="news">News</option>
+          <option value="tips">Tips</option>
+          <option value="updates">Updates</option>
+        </select>
+      </div>
+
       <div className="blog-grid">
-        {posts.map((post) => (
+        {filteredPosts.map((post) => (
           <BlogCard key={post.id} post={post} />
         ))}
       </div>
+
+      {loadingMore && <div className="blog-loading-more">Loading more…</div>}
+      {!hasMore && <div className="blog-end">You reached the end</div>}
     </div>
   );
 };
 
 const BlogCard = ({ post }) => {
-  const snippet = post.excerpt || (post.content ? post.content.slice(0, 130) + "..." : "");
+  const snippet =
+    post.excerpt || (post.content ? post.content.slice(0, 130) + "..." : "");
   const formattedDate = post.createdAt
     ? post.createdAt.toLocaleDateString("hy-AM", {
         year: "numeric",
         month: "long",
-        day: "numeric",
+        day: "numeric"
       })
     : "";
 
@@ -74,7 +156,7 @@ const BlogCard = ({ post }) => {
       {post.img && (
         <img
           src={post.img}
-          alt={post.title || "Blog image"} // ✅ always provide alt
+          alt={post.title || "Blog image"}
           className="blog-public-thumb"
           loading="lazy"
         />

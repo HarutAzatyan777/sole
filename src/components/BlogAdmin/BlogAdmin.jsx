@@ -23,6 +23,10 @@ export default function BlogAdmin() {
   const [content, setContent] = useState("");
   const [imageURL, setImageURL] = useState("");
   const [published, setPublished] = useState(false);
+  const [slug, setSlug] = useState("");
+  const [category, setCategory] = useState("");
+
+
   
 
 
@@ -35,7 +39,14 @@ export default function BlogAdmin() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all"); // all / published / unpublished
 
-  
+  function generateSlug(text) {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9ա-ֆ\s-]/gi, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
+      .trim();
+  }
 
   // Fetch all posts ordered by 'position'
   const fetchPosts = async () => {
@@ -63,20 +74,25 @@ export default function BlogAdmin() {
     try {
       if (editId) {
         const ref = doc(db, "blogPosts", editId);
-        await updateDoc(ref, { title, excerpt, content, img: imageURL, published });
+        await updateDoc(ref, { title, slug, excerpt, content, img: imageURL, published, category });
+
+
         setEditId(null);
       } else {
         const lastPosition = posts.length > 0 ? posts[posts.length - 1].position || posts.length : 0;
         await addDoc(collection(db, "blogPosts"), {
           title,
+          slug,
           excerpt,
           content,
           img: imageURL,
           published,
+          category,
           date: new Date().toISOString(),
           createdAt: serverTimestamp(),
           position: lastPosition + 1,
         });
+        
       }
 
       setTitle("");
@@ -110,6 +126,8 @@ export default function BlogAdmin() {
     setImageURL(post.img || "");
     setPublished(post.published || false);
     setEditId(post.id);
+    setSlug(post.slug || "");
+
   };
 
   const movePost = async (index, direction) => {
@@ -156,6 +174,15 @@ export default function BlogAdmin() {
 
         <label>Content *</label>
 <MarkdownEditor value={content} onChange={setContent} />
+<label>Category *</label>
+<input
+  type="text"
+  placeholder="gold, diamonds, jewelry care..."
+  value={category}
+  onChange={(e) => setCategory(e.target.value)}
+  required
+/>
+
 
         <label>Main Image URL (optional)</label>
         <input type="text" placeholder="https://example.com/image.jpg" value={imageURL} onChange={(e) => setImageURL(e.target.value)} />
@@ -229,10 +256,16 @@ export default function BlogAdmin() {
         <td>
           {isEditing ? (
             <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
+            type="text"
+            placeholder="Enter title..."
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              setSlug(generateSlug(e.target.value)); // ← AUTO SLUG
+            }}
+            required
+          />
+          
           ) : (
             post.title
           )}
@@ -289,11 +322,13 @@ export default function BlogAdmin() {
                   try {
                     await updateDoc(doc(db, "blogPosts", post.id), {
                       title,
+                      slug,
                       excerpt,
                       content,
                       img: imageURL,
                       published,
                     });
+                    
                     setEditId(null);
                     setTitle("");
                     setExcerpt("");

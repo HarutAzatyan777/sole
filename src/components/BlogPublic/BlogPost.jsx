@@ -8,6 +8,11 @@ import remarkGfm from "remark-gfm";
 import { Helmet } from "react-helmet";
 import "./BlogPost.css";
 
+import ReadingProgress from "./ReadingProgress";
+import ShareButtons from "./ShareButtons";
+import RelatedPosts from "./RelatedPosts";
+import PeopleAlsoRead from "./PeopleAlsoRead";
+
 export default function BlogPost() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
@@ -26,6 +31,7 @@ export default function BlogPost() {
 
         const data = snapshot.data();
         let createdAt = null;
+
         if (data.createdAt?.seconds) {
           createdAt = new Date(data.createdAt.seconds * 1000);
         } else if (typeof data.date === "string") {
@@ -48,36 +54,60 @@ export default function BlogPost() {
   if (!post) return <div className="blogpost-notfound">Post not found.</div>;
 
   const siteUrl = `${window.location.origin}/post/${post.id}`;
-  const description = post.excerpt || post.content?.slice(0, 150) || "Blog post content";
+  const description =
+    post.excerpt || post.content?.slice(0, 150) || "Blog post content";
 
   return (
     <>
+      {/* Reading Progress OUTSIDE Helmet */}
+      <ReadingProgress />
+
       <Helmet>
-        <title>{post.title}</title>
+        <title>{post.title} | SoleJewels</title>
+
+        <meta name="title" content={post.title} />
         <meta name="description" content={description} />
         <link rel="canonical" href={siteUrl} />
+
+        {/* --- OpenGraph --- */}
         <meta property="og:type" content="article" />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content={siteUrl} />
         {post.img && <meta property="og:image" content={post.img} />}
+
+        {/* --- Twitter --- */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={post.title} />
         <meta name="twitter:description" content={description} />
         {post.img && <meta name="twitter:image" content={post.img} />}
+
+        {/* --- Structured Data / JSON-LD --- */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: post.title,
-            image: post.img ? [post.img] : [],
-            author: { "@type": "Person", name: "Your Name" },
-            datePublished: post.createdAt?.toISOString() || new Date().toISOString(),
             description: description,
-            mainEntityOfPage: siteUrl,
+            image: post.img ? [post.img] : [],
+            author: { "@type": "Person", name: "SoleJewels Expert" },
+            publisher: {
+              "@type": "Organization",
+              name: "SoleJewels",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://yourdomain.com/logo.png"
+              }
+            },
+            datePublished:
+              post.createdAt?.toISOString() || new Date().toISOString(),
+            mainEntityOfPage: siteUrl
           })}
         </script>
       </Helmet>
+
+      {/* Share Buttons */}
+      <ShareButtons title={post.title} url={siteUrl} />
 
       <article className="blogpost-container">
         {post.img && (
@@ -96,52 +126,57 @@ export default function BlogPost() {
             {post.createdAt.toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
-              day: "numeric",
+              day: "numeric"
             })}
           </p>
         )}
 
+        {/* Markdown Content */}
         <div className="blogpost-content size">
-        <ReactMarkdown
-  remarkPlugins={[remarkGfm]}
-  components={{
-    img: ({ src, alt, ...props }) => (
-      <img
-        src={src}
-        alt={alt || "Blog image"}
-        className="content-img"
-        loading="lazy"
-        {...props}
-      />
-    ),
-    h1: ({ children, ...props }) => (
-      <h1 {...props} className="blogpost-h1">{children}</h1>
-    ),
-    h2: ({ children, ...props }) => (
-      <h2 {...props} className="blogpost-h2">{children}</h2>
-    ),
-    h3: ({ children, ...props }) => (
-      <h3 {...props} className="blogpost-h3">{children}</h3>
-    ),
-    p: ({ children, ...props }) => (
-      <p {...props} className="blogpost-paragraph">{children}</p>
-    ),
-    blockquote: ({ children, ...props }) => (
-      <blockquote {...props} className="blogpost-blockquote">{children}</blockquote>
-    ),
-    ul: ({ children, ...props }) => (
-      <ul {...props} className="blogpost-ul">{children}</ul>
-    ),
-    ol: ({ children, ...props }) => (
-      <ol {...props} className="blogpost-ol">{children}</ol>
-    ),
-  }}
->
-  {post.content}
-</ReactMarkdown>
-
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              img: ({ src, alt }) => (
+                <img
+                  src={src}
+                  alt={alt || "Blog image"}
+                  className="content-img"
+                  loading="lazy"
+                />
+              ),
+              h1: ({ children }) => (
+                <h1 className="blogpost-h1">{children}</h1>
+              ),
+              h2: ({ children }) => (
+                <h2 className="blogpost-h2">{children}</h2>
+              ),
+              h3: ({ children }) => (
+                <h3 className="blogpost-h3">{children}</h3>
+              ),
+              p: ({ children }) => (
+                <p className="blogpost-paragraph">{children}</p>
+              ),
+              blockquote: ({ children }) => (
+                <blockquote className="blogpost-blockquote">{children}</blockquote>
+              ),
+              ul: ({ children }) => (
+                <ul className="blogpost-ul">{children}</ul>
+              ),
+              ol: ({ children }) => (
+                <ol className="blogpost-ol">{children}</ol>
+              )
+            }}
+          >
+            {post.content}
+          </ReactMarkdown>
         </div>
       </article>
+
+      {/* Related Posts */}
+      <RelatedPosts category={post.category} currentId={post.id} />
+
+      {/* People Also Read */}
+      <PeopleAlsoRead currentId={post.id} currentTitle={post.title} />
     </>
   );
 }

@@ -1,0 +1,43 @@
+.related-wrapper {
+    margin-top: 60px;
+  }
+  
+  .related-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  
+  .related-card {
+    display: block;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: #000;
+    transition: 0.25s;
+    border: 1px solid #eaeaea;
+  }
+  
+  .related-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  .related-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .related-card h3 {
+    padding: 15px;
+    font-size: 18px;
+  }
+  
