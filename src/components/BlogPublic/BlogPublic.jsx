@@ -7,7 +7,7 @@ import {
   orderBy,
   limit,
   startAfter,
-  getDocs
+  getDocs,
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import "./BlogPublic.css";
@@ -40,6 +40,7 @@ const BlogPublic = () => {
     }
   };
 
+  // Fetch posts from Firestore
   const fetchPosts = useCallback(async () => {
     if (!hasMore) return;
     try {
@@ -48,7 +49,6 @@ const BlogPublic = () => {
       const q = query(
         collection(db, "blogPosts"),
         where("published", "==", true),
-        ...(category !== "all" ? [where("category", "==", category)] : []),
         orderBy("createdAt", "desc"),
         limit(PAGE_SIZE),
         ...(lastDoc ? [startAfter(lastDoc)] : [])
@@ -79,13 +79,14 @@ const BlogPublic = () => {
       setLoading(false);
       setLoadingMore(false);
     }
-  }, [lastDoc, hasMore, category]);
+  }, [lastDoc, hasMore]);
 
   useEffect(() => {
-    fetchCategories(); // Load categories dynamically
-    fetchPosts(); // Load initial posts
+    fetchCategories();
+    fetchPosts();
   }, [fetchPosts]);
 
+  // Infinite scroll
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -102,8 +103,16 @@ const BlogPublic = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [fetchPosts, loadingMore, hasMore]);
 
-  const filteredPosts = posts.filter((p) =>
-    p.title.toLowerCase().includes(search.toLowerCase())
+  // Filter posts by category and search text
+  const filteredPosts = posts.filter((p) => {
+    const matchesCategory = category === "all" || p.category === category;
+    const matchesSearch = p.title.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
+  // Deduplicate posts by slug
+  const uniquePosts = Array.from(
+    new Map(filteredPosts.map((p) => [p.slug, p])).values()
   );
 
   if (loading && posts.length === 0)
@@ -141,8 +150,8 @@ const BlogPublic = () => {
       </div>
 
       <div className="blog-grid">
-        {filteredPosts.map((post) => (
-          <BlogCard key={post.id} post={post} />
+        {uniquePosts.map((post) => (
+          <BlogCard key={`${post.slug}-${post.id}`} post={post} />
         ))}
       </div>
 
@@ -159,7 +168,7 @@ const BlogCard = ({ post }) => {
     ? post.createdAt.toLocaleDateString("hy-AM", {
         year: "numeric",
         month: "long",
-        day: "numeric"
+        day: "numeric",
       })
     : "";
 

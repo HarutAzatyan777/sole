@@ -43,11 +43,11 @@ export default function BlogAdmin() {
   const [filter, setFilter] = useState("all"); // all / published / unpublished
 
 
-  const checkSlugExists = async (value) => {
-    const q = query(collection(db, "blogPosts"), where("slug", "==", value));
-    const snap = await getDocs(q);
-    return !snap.empty; // true եթե արդեն կա
-  };
+  // const checkSlugExists = async (value) => {
+  //   const q = query(collection(db, "blogPosts"), where("slug", "==", value));
+  //   const snap = await getDocs(q);
+  //   return !snap.empty; // true եթե արդեն կա
+  // };
 
 
   // Fetch all posts ordered by 'position'
