@@ -39,14 +39,9 @@ export default function BlogAdmin() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all"); // all / published / unpublished
 
-  function generateSlug(text) {
-    return text
-      .toLowerCase()
-      .replace(/[^a-z0-9ա-ֆ\s-]/gi, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .trim();
-  }
+
+
+
 
   // Fetch all posts ordered by 'position'
   const fetchPosts = async () => {
@@ -70,19 +65,31 @@ export default function BlogAdmin() {
     e.preventDefault();
     setLoading(true);
     setDone(false);
-
+  
+    if (!slug) {
+      alert("Please provide a slug for the post.");
+      setLoading(false);
+      return;
+    }
+  
     try {
       if (editId) {
         const ref = doc(db, "blogPosts", editId);
-        await updateDoc(ref, { title, slug, excerpt, content, img: imageURL, published, category });
-
-
+        await updateDoc(ref, {
+          title,
+          slug, // օգտագործում ենք state-ում գրած slug-ը
+          excerpt,
+          content,
+          img: imageURL,
+          published,
+          category,
+        });
         setEditId(null);
       } else {
         const lastPosition = posts.length > 0 ? posts[posts.length - 1].position || posts.length : 0;
         await addDoc(collection(db, "blogPosts"), {
           title,
-          slug,
+          slug, // օգտագործում ենք state-ում գրած slug-ը
           excerpt,
           content,
           img: imageURL,
@@ -92,22 +99,26 @@ export default function BlogAdmin() {
           createdAt: serverTimestamp(),
           position: lastPosition + 1,
         });
-        
       }
-
+  
       setTitle("");
       setExcerpt("");
       setContent("");
       setImageURL("");
       setPublished(false);
+      setSlug("");
+      setCategory("");
       setDone(true);
       fetchPosts();
     } catch (err) {
       console.error("Error saving post:", err);
     }
-
+  
     setLoading(false);
   };
+  
+  
+  
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
@@ -174,14 +185,24 @@ export default function BlogAdmin() {
 
         <label>Content *</label>
 <MarkdownEditor value={content} onChange={setContent} />
+<label>Slug</label>
+<input
+  type="text"
+  placeholder="Write your slug here..."
+  value={slug}
+  onChange={(e) => setSlug(e.target.value)}
+/>
+
 <label>Category *</label>
 <input
   type="text"
   placeholder="gold, diamonds, jewelry care..."
   value={category}
-  onChange={(e) => setCategory(e.target.value)}
+  onChange={(e) => setCategory(e.target.value)} // ← use setCategory
   required
 />
+
+
 
 
         <label>Main Image URL (optional)</label>
@@ -261,7 +282,7 @@ export default function BlogAdmin() {
             value={title}
             onChange={(e) => {
               setTitle(e.target.value);
-              setSlug(generateSlug(e.target.value)); // ← AUTO SLUG
+              
             }}
             required
           />

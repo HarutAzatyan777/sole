@@ -1,7 +1,6 @@
-// ./components/BlogPost/BlogPost.jsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -14,31 +13,33 @@ import RelatedPosts from "./RelatedPosts";
 import PeopleAlsoRead from "./PeopleAlsoRead";
 
 export default function BlogPost() {
-  const { id } = useParams();
+  const { slug } = useParams(); // <-- use slug instead of id
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const ref = doc(db, "blogPosts", id);
-        const snapshot = await getDoc(ref);
+        // Query by slug field
+        const q = query(collection(db, "blogPosts"), where("slug", "==", slug));
+        const snap = await getDocs(q);
 
-        if (!snapshot.exists()) {
+        if (snap.empty) {
           setPost(null);
           return;
         }
 
-        const data = snapshot.data();
-        let createdAt = null;
+        const docData = snap.docs[0].data();
+        const docId = snap.docs[0].id;
 
-        if (data.createdAt?.seconds) {
-          createdAt = new Date(data.createdAt.seconds * 1000);
-        } else if (typeof data.date === "string") {
-          createdAt = new Date(data.date);
+        let createdAt = null;
+        if (docData.createdAt?.seconds) {
+          createdAt = new Date(docData.createdAt.seconds * 1000);
+        } else if (typeof docData.date === "string") {
+          createdAt = new Date(docData.date);
         }
 
-        setPost({ id: snapshot.id, ...data, createdAt });
+        setPost({ id: docId, ...docData, createdAt });
       } catch (err) {
         console.error("Error loading blog post:", err);
         setPost(null);
@@ -48,41 +49,36 @@ export default function BlogPost() {
     };
 
     fetchPost();
-  }, [id]);
+  }, [slug]);
 
   if (loading) return <div className="blogpost-loading">Loading...</div>;
   if (!post) return <div className="blogpost-notfound">Post not found.</div>;
 
-  const siteUrl = `${window.location.origin}/post/${post.id}`;
+  const siteUrl = `${window.location.origin}/post/${post.slug}`;
   const description =
     post.excerpt || post.content?.slice(0, 150) || "Blog post content";
 
   return (
     <>
-      {/* Reading Progress OUTSIDE Helmet */}
       <ReadingProgress />
 
       <Helmet>
         <title>{post.title} | SoleJewels</title>
-
         <meta name="title" content={post.title} />
         <meta name="description" content={description} />
         <link rel="canonical" href={siteUrl} />
 
-        {/* --- OpenGraph --- */}
         <meta property="og:type" content="article" />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content={siteUrl} />
         {post.img && <meta property="og:image" content={post.img} />}
 
-        {/* --- Twitter --- */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={post.title} />
         <meta name="twitter:description" content={description} />
         {post.img && <meta name="twitter:image" content={post.img} />}
 
-        {/* --- Structured Data / JSON-LD --- */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
@@ -106,7 +102,6 @@ export default function BlogPost() {
         </script>
       </Helmet>
 
-      {/* Share Buttons */}
       <ShareButtons title={post.title} url={siteUrl} />
 
       <article className="blogpost-container">
@@ -131,7 +126,6 @@ export default function BlogPost() {
           </p>
         )}
 
-        {/* Markdown Content */}
         <div className="blogpost-content size">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
@@ -144,27 +138,15 @@ export default function BlogPost() {
                   loading="lazy"
                 />
               ),
-              h1: ({ children }) => (
-                <h1 className="blogpost-h1">{children}</h1>
-              ),
-              h2: ({ children }) => (
-                <h2 className="blogpost-h2">{children}</h2>
-              ),
-              h3: ({ children }) => (
-                <h3 className="blogpost-h3">{children}</h3>
-              ),
-              p: ({ children }) => (
-                <p className="blogpost-paragraph">{children}</p>
-              ),
+              h1: ({ children }) => <h1 className="blogpost-h1">{children}</h1>,
+              h2: ({ children }) => <h2 className="blogpost-h2">{children}</h2>,
+              h3: ({ children }) => <h3 className="blogpost-h3">{children}</h3>,
+              p: ({ children }) => <p className="blogpost-paragraph">{children}</p>,
               blockquote: ({ children }) => (
                 <blockquote className="blogpost-blockquote">{children}</blockquote>
               ),
-              ul: ({ children }) => (
-                <ul className="blogpost-ul">{children}</ul>
-              ),
-              ol: ({ children }) => (
-                <ol className="blogpost-ol">{children}</ol>
-              )
+              ul: ({ children }) => <ul className="blogpost-ul">{children}</ul>,
+              ol: ({ children }) => <ol className="blogpost-ol">{children}</ol>
             }}
           >
             {post.content}
@@ -172,10 +154,7 @@ export default function BlogPost() {
         </div>
       </article>
 
-      {/* Related Posts */}
       <RelatedPosts category={post.category} currentId={post.id} />
-
-      {/* People Also Read */}
       <PeopleAlsoRead currentId={post.id} currentTitle={post.title} />
     </>
   );
