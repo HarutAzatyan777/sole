@@ -12,7 +12,7 @@ import {
 import { Link } from "react-router-dom";
 import "./BlogPublic.css";
 
-const PAGE_SIZE = 6; // Number of posts per page
+const PAGE_SIZE = 6;
 
 const BlogPublic = () => {
   const [posts, setPosts] = useState([]);
@@ -22,10 +22,26 @@ const BlogPublic = () => {
   const [hasMore, setHasMore] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
+  const [categories, setCategories] = useState(["all"]);
+
+  // Fetch distinct categories from Firestore
+  const fetchCategories = async () => {
+    try {
+      const q = query(collection(db, "blogPosts"), where("published", "==", true));
+      const snapshot = await getDocs(q);
+      const catSet = new Set();
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data();
+        if (data.category) catSet.add(data.category);
+      });
+      setCategories(["all", ...Array.from(catSet)]);
+    } catch (err) {
+      console.error("Error fetching categories:", err);
+    }
+  };
 
   const fetchPosts = useCallback(async () => {
     if (!hasMore) return;
-
     try {
       if (lastDoc === "end") return;
 
@@ -39,7 +55,6 @@ const BlogPublic = () => {
       );
 
       const snapshot = await getDocs(q);
-
       if (snapshot.empty) {
         setHasMore(false);
         setLastDoc("end");
@@ -67,7 +82,8 @@ const BlogPublic = () => {
   }, [lastDoc, hasMore, category]);
 
   useEffect(() => {
-    fetchPosts();
+    fetchCategories(); // Load categories dynamically
+    fetchPosts(); // Load initial posts
   }, [fetchPosts]);
 
   useEffect(() => {
@@ -116,10 +132,11 @@ const BlogPublic = () => {
             setLoading(true);
           }}
         >
-          <option value="all">All Categories</option>
-          <option value="news">News</option>
-          <option value="tips">Tips</option>
-          <option value="updates">Updates</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -147,7 +164,6 @@ const BlogCard = ({ post }) => {
     : "";
 
   return (
-    // Updated link to use slug instead of id
     <Link to={`/blog/${post.slug}`} className="blog-public-card">
       {post.img && (
         <img

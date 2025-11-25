@@ -8,6 +8,7 @@ import {
   updateDoc,
   deleteDoc,
   query,
+  where,
   orderBy,
 } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -25,6 +26,8 @@ export default function BlogAdmin() {
   const [published, setPublished] = useState(false);
   const [slug, setSlug] = useState("");
   const [category, setCategory] = useState("");
+  const [slugExists, setSlugExists] = useState(false);
+
 
 
   
@@ -40,7 +43,11 @@ export default function BlogAdmin() {
   const [filter, setFilter] = useState("all"); // all / published / unpublished
 
 
-
+  const checkSlugExists = async (value) => {
+    const q = query(collection(db, "blogPosts"), where("slug", "==", value));
+    const snap = await getDocs(q);
+    return !snap.empty; // true եթե արդեն կա
+  };
 
 
   // Fetch all posts ordered by 'position'
@@ -73,6 +80,17 @@ export default function BlogAdmin() {
     }
   
     try {
+      // Ստուգում, եթե slug արդեն գոյություն ունի (նոր գրառման համար)
+      if (!editId) {
+        const q = query(collection(db, "blogPosts"), where("slug", "==", slug));
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          alert("This slug already exists. Please choose another one.");
+          setLoading(false);
+          return;
+        }
+      }
+  
       if (editId) {
         const ref = doc(db, "blogPosts", editId);
         await updateDoc(ref, {
@@ -89,7 +107,7 @@ export default function BlogAdmin() {
         const lastPosition = posts.length > 0 ? posts[posts.length - 1].position || posts.length : 0;
         await addDoc(collection(db, "blogPosts"), {
           title,
-          slug, // օգտագործում ենք state-ում գրած slug-ը
+          slug,
           excerpt,
           content,
           img: imageURL,
@@ -116,6 +134,7 @@ export default function BlogAdmin() {
   
     setLoading(false);
   };
+  
   
   
   
@@ -190,8 +209,32 @@ export default function BlogAdmin() {
   type="text"
   placeholder="Write your slug here..."
   value={slug}
-  onChange={(e) => setSlug(e.target.value)}
+  onChange={async (e) => {
+    const value = e.target.value;
+    setSlug(value);
+
+    if (value.trim() === "") {
+      setSlugExists(false);
+      return;
+    }
+
+    try {
+      const q = query(collection(db, "blogPosts"), where("slug", "==", value));
+      const snap = await getDocs(q);
+      // Եթե editId կա, բացառենք նույն գրառումը
+      const exists = !snap.empty && (!editId || snap.docs[0].id !== editId);
+      setSlugExists(exists);
+    } catch (err) {
+      console.error("Error checking slug:", err);
+      setSlugExists(false);
+    }
+  }}
+  style={{
+    borderColor: slugExists ? "red" : undefined
+  }}
 />
+{slugExists && <p style={{ color: "red" }}>This slug already exists.</p>}
+
 
 <label>Category *</label>
 <input
