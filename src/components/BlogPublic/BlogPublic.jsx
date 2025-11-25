@@ -1,4 +1,3 @@
-// ./components/BlogPublic/BlogPublic.jsx
 import React, { useEffect, useState, useCallback } from "react";
 import { db } from "../../firebase";
 import {
@@ -67,12 +66,10 @@ const BlogPublic = () => {
     }
   }, [lastDoc, hasMore, category]);
 
-  // Initial fetch
   useEffect(() => {
     fetchPosts();
   }, [fetchPosts]);
 
-  // Infinite scroll
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -89,7 +86,6 @@ const BlogPublic = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [fetchPosts, loadingMore, hasMore]);
 
-  // Filter/search
   const filteredPosts = posts.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -102,7 +98,6 @@ const BlogPublic = () => {
     <div className="blog-public-container">
       <h1 className="blog-title">Blog</h1>
 
-      {/* Search & Filter */}
       <div className="blog-filters">
         <input
           type="text"
@@ -152,7 +147,8 @@ const BlogCard = ({ post }) => {
     : "";
 
   return (
-    <Link to={`/blog/${post.id}`} className="blog-public-card">
+    // Updated link to use slug instead of id
+    <Link to={`/blog/${post.slug}`} className="blog-public-card">
       {post.img && (
         <img
           src={post.img}
