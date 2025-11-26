@@ -77,7 +77,7 @@
 /* Thumbnail Image */
 .blog-public-thumb {
   width: 100%;
-  height: 190px;
+  height: 400px;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
@@ -139,13 +139,31 @@
   margin-bottom: 10px;
   line-height: 1.4;
   font-family: "Playfair Display", Georgia, serif;
+
+  /* ---- Line Clamp (2 lines) ---- */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  /* Main working property */
+  -webkit-line-clamp: 2;
+
+  /* Standard property (future support) */
+  line-clamp: 2;
 }
+
 
 /* Snippet */
 .blog-snippet {
   font-size: 15px;
   line-height: 1.6;
   color: #555;
+   line-clamp: 2;              /* Standard property (still experimental) */
+  -webkit-line-clamp: 2;      /* Vendor prefix (real working one) */
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   margin-bottom: 15px;
   min-height: 48px;
   font-family: "Playfair Display", Georgia, serif;
