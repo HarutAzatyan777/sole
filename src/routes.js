@@ -16,6 +16,7 @@ import GoldCalculator from "./pages/GoldCalculator/GoldCalculator";
 import BlogAdmin from "./components/BlogAdmin/BlogAdmin";
 import BlogPublic from "./components/BlogPublic/BlogPublic";
 import BlogPost from "./components/BlogPublic/BlogPost";
+import MMToConverter from "./pages/MMToConverter/MMToConverter";
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
@@ -58,6 +59,18 @@ export const getRoutes = (user) => [
       </>
     }
   />,
+  <Route
+  key="/mmtoconverter"
+  path="/mmtoconverter"
+  element={
+    <>
+      <Header />
+      <SecretRedirect />
+      <MMToConverter />
+      <Footer />
+    </>
+  }
+/>,
 
   <Route
     key="/menu"

@@ -1,0 +1,161 @@
+.mmc-container {
+    max-width: 520px;
+    margin: 30px auto;
+    padding: 25px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    font-family: Inter, sans-serif;
+  }
+  
+  .mmc-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+  
+  /* Toggle buttons */
+  
+  .mmc-toggle {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .mmc-toggle-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: #f0f0f0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.25s;
+    font-size: 14px;
+  }
+  
+  .mmc-toggle-btn.active {
+    background: #222;
+    color: white;
+    border-color: #222;
+  }
+  
+  /* Inputs + Select */
+  
+  .mmc-field {
+    margin-bottom: 20px;
+  }
+  
+  .mmc-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  
+  /* input style */
+  .mmc-field input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: 0.2s;
+  }
+  
+  .mmc-field input:focus {
+    border-color: #0066ff;
+    outline: none;
+  }
+  
+  /* select style */
+  .mmc-field select {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .mmc-field select:focus {
+    border-color: #0066ff;
+    outline: none;
+  }
+  
+  /* Buttons */
+  
+  .mmc-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    flex: 1;
+    padding: 10px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+    transition: 0.25s;
+  }
+  
+  .btn.primary {
+    background: #0066ff;
+    color: #fff;
+  }
+  
+  .btn.primary:hover {
+    background: #0052d6;
+  }
+  
+  .btn.light {
+    background: #e7e7e7;
+  }
+  
+  .btn.success {
+    background: #009944;
+    color: #fff;
+  }
+  
+  .btn.success:hover {
+    background: #007d37;
+  }
+  
+  /* Result */
+  
+  .mmc-result {
+    padding: 12px;
+    background: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+  
+  /* Table */
+  
+  .mmc-table-wrap h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .mmc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+  }
+  
+  .mmc-table th,
+  .mmc-table td {
+    padding: 8px 6px;
+    border-top: 1px solid #ddd;
+    font-size: 14px;
+  }
+  
+  .mmc-note {
+    font-size: 12px;
+    color: #666;
+  }
+  
