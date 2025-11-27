@@ -92,7 +92,7 @@ export default function BlogPost() {
               name: "SoleJewels",
               logo: {
                 "@type": "ImageObject",
-                url: "https://yourdomain.com/logo.png"
+                url: "https://www.solejewels.store/logo.png"
               }
             },
             datePublished:
@@ -114,7 +114,7 @@ export default function BlogPost() {
           />
         )}
 
-        <h1 className="blogpost-title">{post.title}</h1>
+        {/* <h1 className="blogpost-title">{post.title}</h1> */}
 
         {post.createdAt && (
           <p className="blogpost-date">
