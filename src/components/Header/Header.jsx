@@ -5,7 +5,6 @@ import "./Header.css";
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-
   const toolsRef = useRef(null);
 
   // Toggle main menu
@@ -16,7 +15,7 @@ const Header = () => {
     setActiveDropdown((prev) => (prev === name ? null : name));
   };
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking outside (desktop + mobile)
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (toolsRef.current && !toolsRef.current.contains(e.target)) {
@@ -24,7 +23,11 @@ const Header = () => {
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside); // mobile support
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
   }, []);
 
   // Close menu & dropdown on link click
@@ -45,69 +48,51 @@ const Header = () => {
         <nav className={`navigation ${menuOpen ? "open" : ""}`}>
           <ul>
             <li>
-              <Link to="/about" onClick={handleLinkClick}>
-                About
-              </Link>
+              <Link to="/about" onClick={handleLinkClick}>About</Link>
             </li>
             <li>
-              <Link to="/contact" onClick={handleLinkClick}>
-                Contact
-              </Link>
+              <Link to="/contact" onClick={handleLinkClick}>Contact</Link>
             </li>
 
-            {/* Dropdown */}
-            <li
-              className={`dropdown ${activeDropdown === "tools" ? "open" : ""}`}
-              ref={toolsRef}
-            >
+            <li className={`dropdown ${activeDropdown === "tools" ? "open" : ""}`} ref={toolsRef}>
+
               <button
-                type="button"
                 className="dropdown-btn"
                 onClick={() => toggleDropdown("tools")}
                 aria-expanded={activeDropdown === "tools"}
               >
-                Tools
-                <span className="arrow-line"></span>
+                Tools <span className="arrow-line"></span>
               </button>
 
               <ul className="dropdown-menu">
                 <li>
-                  <Link to="/diamond-info" onClick={handleLinkClick}>
-                    Diamond Info
-                  </Link>
+                  <Link to="/diamond-info" onClick={handleLinkClick}>Diamond Info</Link>
                 </li>
                 <li>
-                  <Link to="/gold-calculator" onClick={handleLinkClick}>
-                    Gold Calculator
-                  </Link>
+                  <Link to="/gold-calculator" onClick={handleLinkClick}>Gold Calculator</Link>
                 </li>
                 <li>
-                  <Link to="/diamont-mm-converter/en" onClick={handleLinkClick}>
-                    Diamond MM Converter
-                  </Link>
+                  <Link to="/diamont-mm-converter/en" onClick={handleLinkClick}>Diamond MM Converter</Link>
                 </li>
               </ul>
             </li>
 
             <li>
-              <Link to="/blog" onClick={handleLinkClick}>
-                Blog
-              </Link>
+              <Link to="/blog" onClick={handleLinkClick}>Blog</Link>
             </li>
           </ul>
         </nav>
 
         {/* Burger Menu */}
         <button
-  className={`burger ${menuOpen ? "open" : ""}`}
-  onClick={toggleMenu}
-  aria-label={menuOpen ? "Close Menu" : "Open Menu"}
->
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-
+          className={`burger ${menuOpen ? "open" : ""}`}
+          onClick={toggleMenu}
+          aria-label={menuOpen ? "Close Menu" : "Open Menu"}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
     </header>
   );
