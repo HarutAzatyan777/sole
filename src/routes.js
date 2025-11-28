@@ -18,6 +18,7 @@ import BlogPublic from "./components/BlogPublic/BlogPublic";
 import BlogPost from "./components/BlogPublic/BlogPost";
 import MMToConverter from "./pages/MMToConverter/MMToConverter";
 import MMToConverterEn from "./pages/MMToConverter/MMToConverterEn";
+import GoldValueCalculator from "./pages/JewelryPriceCalculator/JewelryPriceCalculator";
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
@@ -83,6 +84,19 @@ export const getRoutes = (user) => [
       <Footer />
     </>
   }
+/>,
+
+<Route
+key="/jewelry-priceCalculator-calculator/en"
+path="/jewelry-priceCalculator-calculator/en"
+element={
+  <>
+    <Header />
+    <SecretRedirect />
+    <GoldValueCalculator />
+    <Footer />
+  </>
+}
 />,
 
   <Route
