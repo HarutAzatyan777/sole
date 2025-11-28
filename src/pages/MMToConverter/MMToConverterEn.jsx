@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./MMToConverter.css";
+import { Helmet } from "react-helmet";
 
-export default function MMToConverter() {
+export default function MMToConverterEn() {
   const [carat, setCarat] = useState("1");
   const [diameter, setDiameter] = useState("6.5");
   const [mode, setMode] = useState("caratToMm");
@@ -14,7 +15,7 @@ export default function MMToConverter() {
     Good: 0.96,
   };
 
-  // 🔥 Diamond parameters (carat + cut)
+  // 🔥 Diamond parameters (ENGLISH)
   const diamondParameters = {
     EX: {
       height: "59% – 63%",
@@ -85,17 +86,17 @@ export default function MMToConverter() {
     if (mode === "caratToMm") {
       const mm = calcCaratToMm(carat);
       if (!mm) {
-        setResult("Խնդրում ենք մուտքագրել ճիշտ կարատ");
+        setResult("Please enter a valid carat value.");
       } else {
-        setResult(`${mm.toFixed(2)} մմ (կախված կտորից)`);
+        setResult(`${mm.toFixed(2)} mm (depends on cut)`);
         setDiameter(mm.toFixed(2));
       }
     } else {
       const c = calcMmToCarat(diameter);
       if (!c) {
-        setResult("Խնդրում ենք մուտքագրել ճիշտ մմ");
+        setResult("Please enter a valid millimeter value.");
       } else {
-        setResult(`${c.toFixed(3)} կարատ (կտորի ուղղումով)`);
+        setResult(`${c.toFixed(3)} carat (with cut correction)`);
         setCarat(c.toFixed(3));
       }
     }
@@ -104,9 +105,9 @@ export default function MMToConverter() {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(result);
-      alert("Պատճենված է");
+      alert("Copied!");
     } catch {
-      alert("Չհաջողվեց պատճենել");
+      alert("Copy failed.");
     }
   };
 
@@ -114,7 +115,24 @@ export default function MMToConverter() {
 
   return (
     <div className="mmc-container">
-      <h2 className="mmc-title">Ադամանդի Carat → mm փոխարկիչ (Cut grade)</h2>
+      <Helmet>
+        <title>Diamond Carat to mm Converter 2025 | Cut Grade Calculator</title>
+        <meta
+          name="description"
+          content="Convert diamond carat to millimeters and vice versa with 2025 updated cut parameters. Excellent, Very Good, and Good grades included for accurate results."
+        />
+        <meta name="keywords" content="diamond carat, mm converter, diamond cut, EX VG Good, 2025, jewelry calculator, carat to mm, mm to carat" />
+      </Helmet>
+
+      <header>
+        <h1 className="mmc-title">
+          Diamond Carat ↔ mm Converter (Cut Grade Included)
+        </h1>
+        <p className="mmc-description">
+          2025-2026 Updated Diamond Carat to Millimeter Converter with Excellent, Very Good, and Good cut grades. Enter carat or diameter to get precise results including diamond cut parameters.
+        </p>
+      </header>
+      
 
       <div className="mmc-toggle">
         <button
@@ -134,7 +152,7 @@ export default function MMToConverter() {
 
       {/* CUT SELECT */}
       <div className="mmc-field">
-        <label>Cut (Կտոր)</label>
+        <label>Cut Grade</label>
         <select value={cut} onChange={(e) => setCut(e.target.value)}>
           <option value="EX">EX (Excellent)</option>
           <option value="VG">VG (Very Good)</option>
@@ -166,7 +184,7 @@ export default function MMToConverter() {
       {/* BUTTONS */}
       <div className="mmc-buttons">
         <button className="btn primary" onClick={handleCalculate}>
-          Հաշվել
+          Calculate
         </button>
         <button
           className="btn light"
@@ -176,32 +194,116 @@ export default function MMToConverter() {
             setResult("");
           }}
         >
-          Մաքրել
+          Clear
         </button>
         <button className="btn success" onClick={handleCopy}>
-          Պատճենել
+          Copy
         </button>
       </div>
 
       {result && (
-        <div className="mmc-result">
-          <strong>Արդյունք:</strong>
-          <p>{result}</p>
-        </div>
-      )}
+  <div className="mmc-result" id="resultBox">
+    <strong>Result:</strong>
+    <p>{result}</p>
 
-      {/* ⭐ NEW — PARAMETER BLOCK */}
+    <div className="mmc-result-params">
+      <h4>Cut Grade: {cut}</h4>
+      <ul>
+        <li>✔ Height: {params.height}</li>
+        <li>✔ Table %: {params.table}</li>
+        <li>✔ Crown Height / Angle: {params.crownHeight} / {params.crownAngle}</li>
+        <li>✔ Girdle Thickness: {params.girdle}</li>
+        <li>✔ Pavilion Depth: {params.pavilionDepth}</li>
+        <li>✔ L/W Ratio: {params.lwRatio}</li>
+        <li>✔ Tilt: {params.tilt}</li>
+        <li>✔ Star Length / Lower Half: {params.starHalf}</li>
+        <li>✔ Culet: {params.culet}</li>
+        <li>✔ Rough Origin: {params.origin}</li>
+      </ul>
+    </div>
+
+    {/* ACTION BUTTONS */}
+    <div className="mmc-action-buttons">
+      <button
+        className="btn success"
+        onClick={() => {
+          const fullText = `
+Result: ${result}
+
+Cut Grade: ${cut}
+Height: ${params.height}
+Table %: ${params.table}
+Crown Height / Angle: ${params.crownHeight} / ${params.crownAngle}
+Girdle Thickness: ${params.girdle}
+Pavilion Depth: ${params.pavilionDepth}
+L/W Ratio: ${params.lwRatio}
+Tilt: ${params.tilt}
+Star Length / Lower Half: ${params.starHalf}
+Culet: ${params.culet}
+Rough Origin: ${params.origin}
+`;
+          navigator.clipboard.writeText(fullText);
+          alert("All results copied!");
+        }}
+      >
+        Copy All
+      </button>
+
+      <button
+        className="btn primary"
+        onClick={() => {
+          const box = document.getElementById("resultBox");
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+
+          const width = box.offsetWidth;
+          const height = box.offsetHeight;
+
+          canvas.width = width * 2;
+          canvas.height = height * 2;
+          ctx.scale(2, 2);
+
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, width, height);
+
+          // Render plain text (clean export)
+          const text = box.innerText.split("\n");
+          ctx.fillStyle = "#000";
+          ctx.font = "16px Arial";
+
+          let y = 30;
+          text.forEach((line) => {
+            ctx.fillText(line, 20, y);
+            y += 24;
+          });
+
+          const link = document.createElement("a");
+          link.download = "diamond_result.png";
+          link.href = canvas.toDataURL();
+          link.click();
+        }}
+      >
+        Download Image
+      </button>
+    </div>
+  </div>
+)}
+
+
+      {/* ⭐ PARAMETER BLOCK */}
       <div className="mmc-params">
-        <h3>Cut Parameter Limits ({cut})</h3>
+        <h3>Diamond Cut Parameters ({cut})</h3>
         <ul>
           <li>✔ Height: {params.height}</li>
           <li>✔ Table %: {params.table}</li>
-          <li>✔ Crown Height / Angle: {params.crownHeight} / {params.crownAngle}</li>
+          <li>
+            ✔ Crown Height / Angle: {params.crownHeight} / {params.crownAngle}
+          </li>
           <li>✔ Girdle Thickness: {params.girdle}</li>
           <li>✔ Pavilion Depth: {params.pavilionDepth}</li>
           <li>✔ L/W Ratio: {params.lwRatio}</li>
           <li>✔ Tilt: {params.tilt}</li>
-          <li>✔ Star / Half: {params.starHalf}</li>
+          <li>✔ Star / Lower Half: {params.starHalf}</li>
           <li>✔ Culet: {params.culet}</li>
           <li>✔ Rough Origin: {params.origin}</li>
         </ul>
@@ -209,7 +311,7 @@ export default function MMToConverter() {
 
       {/* TABLE */}
       <div className="mmc-table-wrap">
-        <h3>Փոխարկման աղյուսակ</h3>
+        <h3>Conversion Table</h3>
         <table className="mmc-table">
           <thead>
             <tr>
@@ -227,7 +329,9 @@ export default function MMToConverter() {
           </tbody>
         </table>
 
-        <p className="mmc-note">* Տվյալները մոտավոր են round brilliant կտորի համար։</p>
+        <p className="mmc-note">
+          * Values are approximate for round brilliant diamonds.
+        </p>
       </div>
     </div>
   );

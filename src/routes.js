@@ -17,6 +17,7 @@ import BlogAdmin from "./components/BlogAdmin/BlogAdmin";
 import BlogPublic from "./components/BlogPublic/BlogPublic";
 import BlogPost from "./components/BlogPublic/BlogPost";
 import MMToConverter from "./pages/MMToConverter/MMToConverter";
+import MMToConverterEn from "./pages/MMToConverter/MMToConverterEn";
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
@@ -60,13 +61,25 @@ export const getRoutes = (user) => [
     }
   />,
   <Route
-  key="/mmtoconverter"
-  path="/mmtoconverter"
+  key="/diamont-mm-converter"
+  path="/diamont-mm-converter"
   element={
     <>
       <Header />
       <SecretRedirect />
       <MMToConverter />
+      <Footer />
+    </>
+  }
+/>,
+  <Route
+  key="/diamont-mm-converter/en"
+  path="/diamont-mm-converter/en"
+  element={
+    <>
+      <Header />
+      <SecretRedirect />
+      <MMToConverterEn />
       <Footer />
     </>
   }

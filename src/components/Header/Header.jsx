@@ -1,75 +1,113 @@
-// ./components/Header/Header.jsx
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
+  const toolsRef = useRef(null);
+
+  // Toggle main menu
+  const toggleMenu = () => setMenuOpen((prev) => !prev);
+
+  // Toggle dropdown accordion
+  const toggleDropdown = (name) => {
+    setActiveDropdown((prev) => (prev === name ? null : name));
+  };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (toolsRef.current && !toolsRef.current.contains(e.target)) {
+        setActiveDropdown(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Close menu & dropdown on link click
+  const handleLinkClick = () => {
+    setMenuOpen(false);
+    setActiveDropdown(null);
   };
 
   return (
-    <header className="site-header diamond-header">
-      <div className="header-container diamond-header-container">
-        <Link to="/" className="logo diamond-logo">
+    <header className="site-header adobe-header">
+      <div className="header-container">
+        {/* Logo */}
+        <Link to="/" className="logo" onClick={handleLinkClick}>
           <img src="/logo.jpg" alt="Logo" />
         </Link>
 
-        <nav className={`navigation diamond-nav ${menuOpen ? "open" : ""}`}>
-          <ul className="diamond-nav-list">
+        {/* Navigation */}
+        <nav className={`navigation ${menuOpen ? "open" : ""}`}>
+          <ul>
             <li>
-              <Link to="/about" onClick={() => setMenuOpen(false)}>
-                About Us
+              <Link to="/about" onClick={handleLinkClick}>
+                About
               </Link>
             </li>
             <li>
-              <Link to="/contact" onClick={() => setMenuOpen(false)}>
+              <Link to="/contact" onClick={handleLinkClick}>
                 Contact
               </Link>
             </li>
-            <li>
-              <Link to="/diamond-info" onClick={() => setMenuOpen(false)}>
-                Diamond Info
-              </Link>
-            </li>
-            <li>
-              <Link to="/gold-calculator" onClick={() => setMenuOpen(false)}>
-                Gold Calculator
-              </Link>
-            </li>
-            {/* Նոր Blog Link / Button */}
-            <li>
-              <Link
-                to="/blog"
-                className="blog-button"
-                onClick={() => setMenuOpen(false)}
+
+            {/* Dropdown */}
+            <li
+              className={`dropdown ${activeDropdown === "tools" ? "open" : ""}`}
+              ref={toolsRef}
+            >
+              <button
+                type="button"
+                className="dropdown-btn"
+                onClick={() => toggleDropdown("tools")}
+                aria-expanded={activeDropdown === "tools"}
               >
+                Tools
+                <span className="arrow-line"></span>
+              </button>
+
+              <ul className="dropdown-menu">
+                <li>
+                  <Link to="/diamond-info" onClick={handleLinkClick}>
+                    Diamond Info
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/gold-calculator" onClick={handleLinkClick}>
+                    Gold Calculator
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/diamont-mm-converter/en" onClick={handleLinkClick}>
+                    Diamond MM Converter
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <Link to="/blog" onClick={handleLinkClick}>
                 Blog
               </Link>
             </li>
           </ul>
         </nav>
 
+        {/* Burger Menu */}
         <button
-          className={`burger diamond-burger ${menuOpen ? "open" : ""}`}
-          onClick={toggleMenu}
-          aria-label={menuOpen ? "Close Menu" : "Open Menu"}
-        >
-          {menuOpen ? (
-            <svg width="24" height="24" viewBox="0 0 24 24">
-              <line x1="4" y1="4" x2="20" y2="20" stroke="black" strokeWidth="2" />
-              <line x1="20" y1="4" x2="4" y2="20" stroke="black" strokeWidth="2" />
-            </svg>
-          ) : (
-            <svg width="24" height="24" viewBox="0 0 24 24">
-              <line x1="3" y1="6" x2="21" y2="6" stroke="black" strokeWidth="2" />
-              <line x1="3" y1="12" x2="21" y2="12" stroke="black" strokeWidth="2" />
-              <line x1="3" y1="18" x2="21" y2="18" stroke="black" strokeWidth="2" />
-            </svg>
-          )}
-        </button>
+  className={`burger ${menuOpen ? "open" : ""}`}
+  onClick={toggleMenu}
+  aria-label={menuOpen ? "Close Menu" : "Open Menu"}
+>
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
       </div>
     </header>
   );
