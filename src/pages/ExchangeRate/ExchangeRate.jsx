@@ -22,6 +22,7 @@ const ExchangeRate = () => {
       .then(setData)
       .catch((err) => console.error("Failed to fetch exchange rates", err));
   }, [base]);
+  
 
   useEffect(() => {
     if (!data) return;
