@@ -1,67 +1,113 @@
+/* Tiffany Premium Jewelry Calculator */
 .calculator-container {
-  max-width: 450px;
+  max-width: 480px;
   margin: 50px auto;
-  padding: 25px;
-  background: #fff5e6;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  font-family: "Arial", sans-serif;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  font-family: "Playfair Display", serif;
   text-align: center;
+  border: 2px solid #a7e8e8;
 }
 
+/* Main Titles */
 .calculator-container h2 {
-  margin-bottom: 20px;
-  color: #b8860b;
+  margin-bottom: 25px;
+  color: #008c95; /* Tiffany deep tone */
+  font-size: 28px;
+  letter-spacing: 0.5px;
 }
 
 .calculator-container h3 {
-  margin-top: 20px;
-  color: #8b5e3c;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  color: #037f85;
+  font-size: 20px;
+  font-weight: 600;
 }
 
-.input-group {
-  margin-bottom: 15px;
+/* Input Containers */
+.jw-input {
+  margin-bottom: 18px;
   text-align: left;
 }
 
-.input-group label {
+.jw-input label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #8b5e3c;
-}
-
-.input-group input,
-.input-group select {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid #d4af37;
-  border-radius: 6px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #045c60;
   font-size: 14px;
 }
 
+/* Premium Input Style */
+.jw-input input,
+.jw-input select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1.5px solid #a7e8e8;
+  background-color: #ffffff;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: 0.25s ease;
+  outline: none;
+}
+
+.jw-input input:focus,
+.jw-input select:focus {
+  border-color: #00b5be;
+  box-shadow: 0 0 6px rgba(0, 181, 190, 0.3);
+}
+
+/* Tiffany Button */
 .jewbutton {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background-color: #d4af37;
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #00b5be;
   border: none;
-  border-radius: 8px;
-  color: #fff;
+  border-radius: 10px;
+  color: #ffffff;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  transition: 0.25s ease;
+  font-family: "Arial", sans-serif;
 }
 
 .jewbutton:hover {
-  background-color: #b8860b;
+  background-color: #008c95;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Result Box */
 .result {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #fff1cc;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #b8860b;
+  margin-top: 25px;
+  padding: 18px;
+  background-color: #e0fafb;
+  border-radius: 12px;
+  font-size: 19px;
+  font-weight: 600;
+  color: #007b82;
+  border: 1.5px solid #9de8e8;
+  box-shadow: 0 5px 14px rgba(0,0,0,0.08);
+}
+
+/* Fade-in Animation for Result */
+.result {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

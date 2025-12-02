@@ -18,7 +18,7 @@ import BlogPublic from "./components/BlogPublic/BlogPublic";
 import BlogPost from "./components/BlogPublic/BlogPost";
 import MMToConverter from "./pages/MMToConverter/MMToConverter";
 import MMToConverterEn from "./pages/MMToConverter/MMToConverterEn";
-import GoldValueCalculator from "./pages/JewelryPriceCalculator/JewelryPriceCalculator";
+import JewelryPriceCalculator from "./pages/JewelryPriceCalculator/JewelryPriceCalculator";
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
@@ -93,7 +93,7 @@ element={
   <>
     <Header />
     <SecretRedirect />
-    <GoldValueCalculator />
+    <JewelryPriceCalculator />
     <Footer />
   </>
 }

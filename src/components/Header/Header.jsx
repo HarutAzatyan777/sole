@@ -74,6 +74,10 @@ const Header = () => {
                 <li>
                   <Link to="/diamont-mm-converter/en" onClick={handleLinkClick}>Diamond MM Converter</Link>
                 </li>
+                <li>
+                  <Link to="/jewelry-priceCalculator-calculator/en" onClick={handleLinkClick}>JewelryPriceCalculator</Link>
+                </li>
+                
               </ul>
             </li>
 
