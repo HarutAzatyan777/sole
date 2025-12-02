@@ -6,6 +6,7 @@ import ScrollToTop from "../components/ScrollToTop";
 import JewelleryCard from "./JewelleryCard/JewelleryCard";
 import "../styles/JewelleryMenuPage.css";
 import ImageModal from "./ImageModal/ImageModal";
+import GoldPrice from "./GoldPrice/GoldPrice";
 
 function slugify(text) {
   return text
@@ -23,6 +24,7 @@ function JewelleryMenuSection({ section, onOpenGallery }) {
       className="jewellery-section"
       aria-labelledby={slugify(section.category)}
     >
+      <GoldPrice />
       <h3 className="jewellery-title" id={slugify(section.category)}>
         {section.category}
       </h3>

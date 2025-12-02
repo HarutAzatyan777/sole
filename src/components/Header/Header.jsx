@@ -48,14 +48,20 @@ const Header = () => {
         <nav className={`navigation ${menuOpen ? "open" : ""}`}>
           <ul>
             <li>
-              <Link to="/about" onClick={handleLinkClick}>About</Link>
+              <Link to="/about" onClick={handleLinkClick}>
+                About
+              </Link>
             </li>
             <li>
-              <Link to="/contact" onClick={handleLinkClick}>Contact</Link>
+              <Link to="/contact" onClick={handleLinkClick}>
+                Contact
+              </Link>
             </li>
 
-            <li className={`dropdown ${activeDropdown === "tools" ? "open" : ""}`} ref={toolsRef}>
-
+            <li
+              className={`dropdown ${activeDropdown === "tools" ? "open" : ""}`}
+              ref={toolsRef}
+            >
               <button
                 className="dropdown-btn"
                 onClick={() => toggleDropdown("tools")}
@@ -66,28 +72,46 @@ const Header = () => {
 
               <ul className="dropdown-menu">
                 <li>
-                  <Link to="/diamond-info" onClick={handleLinkClick}>Diamond Info</Link>
+                  <Link to="/diamond-info" onClick={handleLinkClick}>
+                    Diamond Info
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/gold-calculator" onClick={handleLinkClick}>Gold Calculator</Link>
+                  <Link to="/gold-calculator" onClick={handleLinkClick}>
+                    Gold Calculator
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/diamont-mm-converter/en" onClick={handleLinkClick}>Diamond MM Converter</Link>
+                  <Link to="/diamont-mm-converter/en" onClick={handleLinkClick}>
+                    Diamond MM Converter
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/jewelry-priceCalculator-calculator/en" onClick={handleLinkClick}>JewelryPriceCalculator</Link>
+                  <Link
+                    to="/jewelry-priceCalculator-calculator/en"
+                    onClick={handleLinkClick}
+                  >
+                    JewelryPriceCalculator
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/gold-price" onClick={handleLinkClick}>
+                    Gold Price
+                  </Link>
+                </li>
 
-                </li>
                 <li>
-                  <Link to="/exchange-rate" onClick={handleLinkClick}>ExchangeRatePage</Link>
-                  
+                  <Link to="/exchange-rate" onClick={handleLinkClick}>
+                    ExchangeRatePage
+                  </Link>
                 </li>
-                
               </ul>
             </li>
 
             <li>
-              <Link to="/blog" onClick={handleLinkClick}>Blog</Link>
+              <Link to="/blog" onClick={handleLinkClick}>
+                Blog
+              </Link>
             </li>
           </ul>
         </nav>

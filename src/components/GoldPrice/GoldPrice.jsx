@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./GoldPrice.css";
 
 const WORK_HOURS_UPDATE_TIMES = [9, 14, 19];
@@ -32,12 +32,11 @@ const GoldPrice = () => {
   const [goldPriceChanged, setGoldPriceChanged] = useState(false);
   const [silverPriceChanged, setSilverPriceChanged] = useState(false);
 
-  const apiKey = "goldapi-1db5oxrlrxf6yrv-io";
+  const updateTimeoutRef = useRef(null);
   const STORAGE_KEY = "metal_price_cache";
-
   const armenianMarketDiscountPercent = 2;
 
-  const fetchPrices = (selectedCurrency) => {
+  const fetchPrices = useCallback(async (selectedCurrency) => {
     const now = new Date();
     const formattedDateTime = now.toISOString().slice(0, 16).replace("T", " ");
     const today = now.toISOString().split("T")[0];
@@ -45,21 +44,7 @@ const GoldPrice = () => {
     const cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
     const cachedEntry = cached[selectedCurrency];
 
-    if (
-      cachedEntry &&
-      cachedEntry.date === today &&
-      cachedEntry.goldGram !== null &&
-      cachedEntry.silverGram !== null
-    ) {
-      if (goldPricePerGram !== null && goldPricePerGram !== cachedEntry.goldGram) {
-        setGoldPriceChanged(true);
-        setTimeout(() => setGoldPriceChanged(false), 1500);
-      }
-      if (silverPricePerGram !== null && silverPricePerGram !== cachedEntry.silverGram) {
-        setSilverPriceChanged(true);
-        setTimeout(() => setSilverPriceChanged(false), 1500);
-      }
-
+    if (cachedEntry && cachedEntry.date === today) {
       setGoldPricePerGram(cachedEntry.goldGram);
       setSilverPricePerGram(cachedEntry.silverGram);
       setLastUpdateDateTime(formattedDateTime);
@@ -69,101 +54,62 @@ const GoldPrice = () => {
 
     setLoading(true);
 
-    const goldFetch = fetch(`https://www.goldapi.io/api/XAU/${selectedCurrency}`, {
-      method: "GET",
-      headers: {
-        "x-access-token": apiKey,
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      if (!res.ok) throw new Error("Gold API Error");
-      return res.json();
-    });
+    try {
+      const res = await fetch(
+        `https://my-serverless-api-one.vercel.app/api/gold?currency=${selectedCurrency}`
+      );
+      if (!res.ok) throw new Error("Failed to fetch gold prices");
+      const data = await res.json();
 
-    const silverFetch = fetch(`https://www.goldapi.io/api/XAG/${selectedCurrency}`, {
-      method: "GET",
-      headers: {
-        "x-access-token": apiKey,
-        "Content-Type": "application/json",
-      },
-    }).then((res) => {
-      if (!res.ok) throw new Error("Silver API Error");
-      return res.json();
-    });
+      const goldGramPrice = (data.gold / 31.1035) * (1 - armenianMarketDiscountPercent / 100);
+      const silverGramPrice = data.silver / 31.1035;
 
-    Promise.all([goldFetch, silverFetch])
-      .then(([goldData, silverData]) => {
-        const goldPricePerOunce = goldData.price;
-        const silverPricePerOunce = silverData.price;
+      if (goldPricePerGram !== null && goldPricePerGram !== goldGramPrice) {
+        setGoldPriceChanged(true);
+        setTimeout(() => setGoldPriceChanged(false), 1500);
+      }
+      if (silverPricePerGram !== null && silverPricePerGram !== silverGramPrice) {
+        setSilverPriceChanged(true);
+        setTimeout(() => setSilverPriceChanged(false), 1500);
+      }
 
-        if (!goldPricePerOunce || !silverPricePerOunce) throw new Error("Missing price data");
+      setGoldPricePerGram(goldGramPrice);
+      setSilverPricePerGram(silverGramPrice);
+      setLastUpdateDateTime(formattedDateTime);
 
-        const goldGramPrice = goldPricePerOunce / 31.1035;
-        const silverGramPrice = silverPricePerOunce / 31.1035;
-        const discountedGoldGramPrice = goldGramPrice * (1 - armenianMarketDiscountPercent / 100);
-
-        if (goldPricePerGram !== null && goldPricePerGram !== discountedGoldGramPrice) {
-          setGoldPriceChanged(true);
-          setTimeout(() => setGoldPriceChanged(false), 1500);
-        }
-        if (silverPricePerGram !== null && silverPricePerGram !== silverGramPrice) {
-          setSilverPriceChanged(true);
-          setTimeout(() => setSilverPriceChanged(false), 1500);
-        }
-
-        setGoldPricePerGram(discountedGoldGramPrice);
-        setSilverPricePerGram(silverGramPrice);
-        setLastUpdateDateTime(formattedDateTime);
-
-        const updatedCache = {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
           ...cached,
           [selectedCurrency]: {
-            goldGram: discountedGoldGramPrice,
+            goldGram: goldGramPrice,
             silverGram: silverGramPrice,
             date: today,
           },
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCache));
-        setError(null);
-      })
-      .catch((err) => {
-        console.error("Error fetching prices:", err);
-        setError("Չհաջողվեց բեռնել ոսկու կամ արծաթի գինը");
-        setGoldPricePerGram(null);
-        setSilverPricePerGram(null);
-        setLastUpdateDateTime(null);
-      })
-      .finally(() => setLoading(false));
-  };
+        })
+      );
 
-  const updateTimeoutRef = useRef(null);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError("Չհաջողվեց բեռնել ոսկու կամ արծաթի գինը");
+      setGoldPricePerGram(null);
+      setSilverPricePerGram(null);
+      setLastUpdateDateTime(null);
+    } finally {
+      setLoading(false);
+    }
+  }, [goldPricePerGram, silverPricePerGram]);
 
   const getMillisUntilNextUpdate = () => {
     const now = new Date();
     const currentHour = now.getHours();
-    const currentMinute = now.getMinutes();
-    const currentSecond = now.getSeconds();
-
-    let nextHour = null;
-    for (let hour of WORK_HOURS_UPDATE_TIMES) {
-      if (
-        hour > currentHour ||
-        (hour === currentHour && (currentMinute > 0 || currentSecond > 0))
-      ) {
-        nextHour = hour;
-        break;
-      }
-    }
-    if (nextHour === null) {
-      const tomorrow9 = new Date(now);
-      tomorrow9.setDate(now.getDate() + 1);
-      tomorrow9.setHours(WORK_HOURS_UPDATE_TIMES[0], 0, 0, 0);
-      return tomorrow9.getTime() - now.getTime();
-    } else {
-      const nextUpdate = new Date(now);
-      nextUpdate.setHours(nextHour, 0, 0, 0);
-      return nextUpdate.getTime() - now.getTime();
-    }
+    let nextHour =
+      WORK_HOURS_UPDATE_TIMES.find((h) => h > currentHour) ||
+      WORK_HOURS_UPDATE_TIMES[0] + 24;
+    const nextUpdate = new Date(now);
+    nextUpdate.setHours(nextHour, 0, 0, 0);
+    return nextUpdate.getTime() - now.getTime();
   };
 
   useEffect(() => {
@@ -171,10 +117,7 @@ const GoldPrice = () => {
 
     const scheduleNextUpdate = () => {
       fetchPrices(currency);
-      const timeout = getMillisUntilNextUpdate();
-      updateTimeoutRef.current = setTimeout(() => {
-        scheduleNextUpdate();
-      }, timeout);
+      updateTimeoutRef.current = setTimeout(scheduleNextUpdate, getMillisUntilNextUpdate());
     };
 
     scheduleNextUpdate();
@@ -182,7 +125,7 @@ const GoldPrice = () => {
     return () => {
       if (updateTimeoutRef.current) clearTimeout(updateTimeoutRef.current);
     };
-  }, [currency]);
+  }, [currency, fetchPrices]);
 
   const displayedKarats = showMoreKarats
     ? Object.entries(karatPurity)
@@ -223,7 +166,9 @@ const GoldPrice = () => {
               {displayedKarats.map(([karat, purity]) => (
                 <tr key={karat}>
                   <td>{karat}</td>
-                  <td style={{ textAlign: "right" }}>{(goldPricePerGram * purity).toFixed(2)}</td>
+                  <td style={{ textAlign: "right" }}>
+                    {(goldPricePerGram * purity).toFixed(2)}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -241,7 +186,10 @@ const GoldPrice = () => {
           </p>
 
           {showMoreKarats && (
-            <button className="toggle-btn toggle-btn-secondary" onClick={() => setShowMoreKarats(false)}>
+            <button
+              className="toggle-btn toggle-btn-secondary"
+              onClick={() => setShowMoreKarats(false)}
+            >
               Less
             </button>
           )}
