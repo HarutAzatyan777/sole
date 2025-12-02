@@ -50,8 +50,8 @@ export const getRoutes = (user) => [
     }
   />,
   <Route
-    key="/gold-price"
-    path="/gold-price"
+    key="/vosku-gine"
+    path="/vosku-gine"
     element={
       <>
         <Header />

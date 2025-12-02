@@ -95,7 +95,7 @@ const Header = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/gold-price" onClick={handleLinkClick}>
+                  <Link to="/vosku-gine" onClick={handleLinkClick}>
                     Gold Price
                   </Link>
                 </li>
