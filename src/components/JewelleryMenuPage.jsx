@@ -25,6 +25,7 @@ function JewelleryMenuSection({ section, onOpenGallery }) {
       aria-labelledby={slugify(section.category)}
     >
       <GoldPrice />
+      
       <h3 className="jewellery-title" id={slugify(section.category)}>
         {section.category}
       </h3>
