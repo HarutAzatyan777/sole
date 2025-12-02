@@ -24,7 +24,7 @@ function JewelleryMenuSection({ section, onOpenGallery }) {
       className="jewellery-section"
       aria-labelledby={slugify(section.category)}
     >
-      <GoldPrice />
+     
       
       <h3 className="jewellery-title" id={slugify(section.category)}>
         {section.category}
@@ -137,11 +137,11 @@ export default function JewelleryMenuPage() {
   {/* <video autoPlay muted loop playsInline className="hero-video">
     <source src="/videos/jewelry-bg2.webp" type="video/mp4" />
     Ձեր դիտարկիչը չի աջակցում տեսանյութերին։
-  </video> */}
+    </video> */}
   <img 
   src="/videos/jewelry-bg2.webp" 
-  alt="Jewelry background"
   className="hero-video"
+  alt="Jewelry background"
 />
   
   <div className="hero-overlay">
@@ -163,6 +163,7 @@ export default function JewelleryMenuPage() {
 </div>
 
 </section>
+      <GoldPrice />
 
 
       {/* MENU CONTENT */}

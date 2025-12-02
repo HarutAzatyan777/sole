@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./GoldPrice.css";
 import { Helmet } from "react-helmet-async";
+import BlogPublic from "../BlogPublic/BlogPublic";
 
 
 const WORK_HOURS_UPDATE_TIMES = [9, 14, 19];
@@ -232,6 +233,7 @@ const GoldPrice = () => {
         <p>Տվյալներ դեռ չկան</p>
       )}
       
+      <BlogPublic />
     </div>
   );
 };
