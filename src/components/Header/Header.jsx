@@ -76,6 +76,11 @@ const Header = () => {
                 </li>
                 <li>
                   <Link to="/jewelry-priceCalculator-calculator/en" onClick={handleLinkClick}>JewelryPriceCalculator</Link>
+
+                </li>
+                <li>
+                  <Link to="/exchange-rate" onClick={handleLinkClick}>ExchangeRatePage</Link>
+                  
                 </li>
                 
               </ul>
