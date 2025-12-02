@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import "./GoldPrice.css";
+import { Helmet } from "react-helmet-async";
+
 
 const WORK_HOURS_UPDATE_TIMES = [9, 14, 19];
 
@@ -133,6 +135,38 @@ const GoldPrice = () => {
 
   return (
     <div className="gold-price-container">
+        <Helmet>
+    <title>Ոսկու Գին ։ Live Gold Price per Gram (USD, EUR, GBP) | Sole Jewelry</title>
+    <meta
+      name="description"
+      content="Տեսեք իրական ժամանակում ոսկու գինը՝ 1 գրամի հաշվով USD, EUR, GBP արժույթներով։ Live gold price Armenia — ամենօրյա թարմացում 09:00, 14:00, 19:00 ժամերին։"
+    />
+    <meta name="keywords" content="ոսկու գին, ոսկու գին Հայաստան, gold price, gold price per gram, ոսկի վաճառել, ոսկու գնահատում" />
+    <link rel="canonical" href="https://solejewelry.com/gold-price" />
+
+    {/* JSON-LD Google Structured Data */}
+    <script type="application/ld+json">
+      {`
+      {
+        "@context": "https://schema.org",
+        "@type": "FinancialProduct",
+        "name": "Live Gold Price per Gram",
+        "description": "Real-time gold and silver prices updated throughout the day.",
+        "brand": {
+          "@type": "Brand",
+          "name": "Sole Jewelry"
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "${currency}",
+          "price": "${goldPricePerGram ? goldPricePerGram.toFixed(2) : ""}",
+          "availability": "https://schema.org/InStock"
+        },
+        "url": "https://solejewelry.com/gold-price"
+      }
+      `}
+    </script>
+  </Helmet>
       <label>
         Ընտրեք արժույթը՝
         <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
