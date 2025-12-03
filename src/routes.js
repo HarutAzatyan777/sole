@@ -45,6 +45,7 @@ export const getRoutes = (user) => [
         <Header />
         <SecretRedirect />
         <ExchangeRatePage />
+        <BlogPublic />
         <Footer />
       </>
     }
@@ -55,8 +56,10 @@ export const getRoutes = (user) => [
     element={
       <>
         <Header />
+        
         <SecretRedirect />
         <GoldPrice />
+        <BlogPublic />
         <Footer />
       </>
     }
@@ -107,6 +110,7 @@ element={
   <>
     <Header />
     <SecretRedirect />
+    <GoldPrice />
     <JewelryPriceCalculator />
     <Footer />
   </>
