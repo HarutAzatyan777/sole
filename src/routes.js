@@ -24,17 +24,23 @@ import JewelryMoodboard from "./pages/JewelryMoodboard/JewelryMoodboard";
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
+const PageShell = ({ children, withSecretRedirect = true, withFooter = true }) => (
+  <>
+    <Header />
+    {withSecretRedirect && <SecretRedirect />}
+    {children}
+    {withFooter && <Footer />}
+  </>
+);
+
 export const getRoutes = (user) => [
   <Route
     key="/"
     path="/"
     element={
-      <>
-        <Header />
-        <SecretRedirect />
+      <PageShell>
         <MenuPage />
-        <Footer />
-      </>
+      </PageShell>
     }
   />,
 
@@ -42,27 +48,20 @@ export const getRoutes = (user) => [
     key="/exchange-rate"
     path="/exchange-rate"
     element={
-      <>
-        <Header />
-        <SecretRedirect />
+      <PageShell>
         <ExchangeRatePage />
         <BlogPublic />
-        <Footer />
-      </>
+      </PageShell>
     }
   />,
   <Route
     key="/vosku-gine"
     path="/vosku-gine"
     element={
-      <>
-        <Header />
-        
-        <SecretRedirect />
+      <PageShell>
         <GoldPrice />
         <BlogPublic />
-        <Footer />
-      </>
+      </PageShell>
     }
   />,
 
@@ -71,36 +70,27 @@ export const getRoutes = (user) => [
     key="/gold-calculator"
     path="/gold-calculator"
     element={
-      <>
-        <Header />
-        <SecretRedirect />
+      <PageShell>
         <GoldCalculator />
-        <Footer />
-      </>
+      </PageShell>
     }
   />,
   <Route
   key="/diamont-mm-converter"
   path="/diamont-mm-converter"
   element={
-    <>
-      <Header />
-      <SecretRedirect />
+    <PageShell>
       <MMToConverter />
-      <Footer />
-    </>
+    </PageShell>
   }
 />,
   <Route
   key="/diamont-mm-converter/en"
   path="/diamont-mm-converter/en"
   element={
-    <>
-      <Header />
-      <SecretRedirect />
+    <PageShell>
       <MMToConverterEn />
-      <Footer />
-    </>
+    </PageShell>
   }
 />,
 
@@ -108,13 +98,10 @@ export const getRoutes = (user) => [
 key="/jewelry-priceCalculator-calculator/en"
 path="/jewelry-priceCalculator-calculator/en"
 element={
-  <>
-    <Header />
-    <SecretRedirect />
-    <GoldPrice />
+  <PageShell>
+    {/* <GoldPrice /> */}
     <JewelryPriceCalculator />
-    <Footer />
-  </>
+  </PageShell>
 }
 />,
 
@@ -122,12 +109,9 @@ element={
     key="/menu"
     path="/menu"
     element={
-      <>
-        <Header />
-        <SecretRedirect />
+      <PageShell>
         <MenuPage />
-        <Footer />
-      </>
+      </PageShell>
     }
   />,
 
@@ -135,12 +119,9 @@ element={
     key="/about"
     path="/about"
     element={
-      <>
-        <Header />
-        <SecretRedirect />
+      <PageShell>
         <AboutPage />
-        <Footer />
-      </>
+      </PageShell>
     }
   />,
 
@@ -148,12 +129,9 @@ element={
     key="/diamond-info"
     path="/diamond-info"
     element={
-      <>
-        <Header />
-        <SecretRedirect />
+      <PageShell>
         <DiamondInfoPage />
-        <Footer />
-      </>
+      </PageShell>
     }
   />,
 
@@ -161,12 +139,9 @@ element={
     key="/contact"
     path="/contact"
     element={
-      <>
-        <Header />
-        <SecretRedirect />
+      <PageShell>
         <ContactPage />
-        <Footer />
-      </>
+      </PageShell>
     }
   />,
 
@@ -178,16 +153,13 @@ element={
     path="/admin"
     element={
       user?.email === ADMIN_EMAIL ? (
-        <>
-          <Header />
+        <PageShell withSecretRedirect={false} withFooter={false}>
           <AdminPanelFirebase />
-        </>
+        </PageShell>
       ) : (
-        <>
-          <Header />
+        <PageShell withSecretRedirect={false}>
           <LoginForm />
-          <Footer />
-        </>
+        </PageShell>
       )
     }
   />,
@@ -200,16 +172,13 @@ element={
     path="/admin-blog"
     element={
       user?.email === ADMIN_EMAIL ? (
-        <>
-          <Header />
+        <PageShell withSecretRedirect={false} withFooter={false}>
           <BlogAdmin />
-        </>
+        </PageShell>
       ) : (
-        <>
-          <Header />
+        <PageShell withSecretRedirect={false}>
           <LoginForm />
-          <Footer />
-        </>
+        </PageShell>
       )
     }
   />,
@@ -221,22 +190,18 @@ element={
     key="/blog"
     path="/blog"
     element={
-      <>
-        <Header />
+      <PageShell withSecretRedirect={false}>
         <BlogPublic />
-        <Footer />
-      </>
+      </PageShell>
     }
   />,
   <Route
   key="/jewelry-moodboard"
   path="/jewelry-moodboard"
   element={
-    <>
-      <Header />
+    <PageShell withSecretRedirect={false}>
       <JewelryMoodboard />
-      <Footer />
-    </>
+    </PageShell>
   }
 />,
 
@@ -244,11 +209,9 @@ element={
   key="/blog-post"
   path="/blog/:slug"
   element={
-    <>
-      <Header />
+    <PageShell withSecretRedirect={false}>
       <BlogPost />
-      <Footer />
-    </>
+    </PageShell>
   }
 />,
 

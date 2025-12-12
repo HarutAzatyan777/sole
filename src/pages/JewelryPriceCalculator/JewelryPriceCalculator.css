@@ -61,6 +61,14 @@
   box-shadow: 0 0 6px rgba(0, 181, 190, 0.3);
 }
 
+.field-hint {
+  display: block;
+  margin-top: 4px;
+  color: #045c60;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
 /* Tiffany Button */
 .jewbutton {
   margin-top: 20px;
@@ -75,6 +83,13 @@
   letter-spacing: 0.5px;
   transition: 0.25s ease;
   font-family: "Arial", sans-serif;
+}
+
+.jewbutton:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .jewbutton:hover {
@@ -94,6 +109,11 @@
   color: #007b82;
   border: 1.5px solid #9de8e8;
   box-shadow: 0 5px 14px rgba(0,0,0,0.08);
+}
+
+.breakdown p {
+  margin: 6px 0;
+  font-weight: 500;
 }
 
 /* Fade-in Animation for Result */

@@ -6,7 +6,6 @@ import ScrollToTop from "../components/ScrollToTop";
 import JewelleryCard from "./JewelleryCard/JewelleryCard";
 import "../styles/JewelleryMenuPage.css";
 import ImageModal from "./ImageModal/ImageModal";
-import GoldPrice from "./GoldPrice/GoldPrice";
 
 function slugify(text) {
   return text
@@ -24,8 +23,6 @@ function JewelleryMenuSection({ section, onOpenGallery }) {
       className="jewellery-section"
       aria-labelledby={slugify(section.category)}
     >
-     
-      
       <h3 className="jewellery-title" id={slugify(section.category)}>
         {section.category}
       </h3>
@@ -51,6 +48,7 @@ function JewelleryMenuSection({ section, onOpenGallery }) {
 export default function JewelleryMenuPage() {
   const [menu, setMenu] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeGallery, setActiveGallery] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeItem, setActiveItem] = useState(null);
@@ -60,26 +58,32 @@ export default function JewelleryMenuPage() {
     return cats.map((cat) => ({ name: cat, slug: slugify(cat) }));
   }, [menu]);
 
-  useEffect(() => {
-    const fetchMenu = async () => {
-      try {
-        const q = query(collection(db, "menu"), orderBy("order"));
-        const snapshot = await getDocs(q);
-        const data = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setMenu(data);
-      } catch (error) {
-        console.error("Չհաջողվեց բեռնել մենյուն։", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMenu();
+  const loadMenu = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const q = query(collection(db, "menu"), orderBy("order"));
+      const snapshot = await getDocs(q);
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMenu(data);
+    } catch (error) {
+      console.error("Չհաջողվեց բեռնել մենյուն։", error);
+      setError("Չհաջողվեց բեռնել մենյուն։ Խնդրում ենք կրկին փորձել:");
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadMenu();
+  }, [loadMenu]);
+
   useEffect(() => {
     const hero = document.getElementById("heroSection");
+    if (!hero) return;
 
     const onScroll = () => {
       if (window.scrollY > 250) {
@@ -90,11 +94,12 @@ export default function JewelleryMenuPage() {
     };
 
     window.addEventListener("scroll", onScroll);
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    if (!activeGallery) return;
+    if (!activeGallery || activeGallery.length <= 1) return;
     const nextIndex = (activeIndex + 1) % activeGallery.length;
     const prevIndex =
       (activeIndex - 1 + activeGallery.length) % activeGallery.length;
@@ -134,60 +139,74 @@ export default function JewelleryMenuPage() {
     <div className="jewellery-menu-page">
       {/* HERO VIDEO SECTION */}
       <section className="hero-video-section" id="heroSection">
-  {/* <video autoPlay muted loop playsInline className="hero-video">
-    <source src="/videos/jewelry-bg2.webp" type="video/mp4" />
-    Ձեր դիտարկիչը չի աջակցում տեսանյութերին։
-    </video> */}
-  <img 
-  src="/videos/jewelry-bg2.webp" 
-  className="hero-video"
-  alt="Jewelry background"
-/>
-  
-  <div className="hero-overlay">
-  <div className="hero-text">
-    <h1>Fashion fades, style remains</h1>
-    <p>Discover the luxurious world of gold with Sole Jewelry</p>
-    <div
-      className="scroll-down-indicator"
-      onClick={() => {
-        window.scrollTo({
-          top: window.innerHeight,
-          behavior: "smooth",
-        });
-      }}
-    >
-      <span className="arrow-down"></span> {/* ↓ arrow */}
-    </div>
-  </div>
-</div>
+        {/* <video autoPlay muted loop playsInline className="hero-video">
+          <source src="/videos/jewelry-bg2.webp" type="video/mp4" />
+          Ձեր դիտարկիչը չի աջակցում տեսանյութերին։
+        </video> */}
+        <img
+          src="/videos/jewelry-bg2.webp"
+          className="hero-video"
+          alt="Jewelry background"
+        />
 
-</section>
-      <GoldPrice />
-
+        <div className="hero-overlay">
+          <div className="hero-text">
+            <h1>Fashion fades, style remains</h1>
+            <p>Discover the luxurious world of gold with Sole Jewelry</p>
+            <button
+              type="button"
+              className="scroll-down-indicator"
+              onClick={() => {
+                window.scrollTo({
+                  top: window.innerHeight,
+                  behavior: "smooth",
+                });
+              }}
+              aria-label="Scroll to the collection"
+            >
+              <span className="arrow-down" aria-hidden="true"></span>
+              <span className="sr-only">Scroll to the collection</span>
+            </button>
+          </div>
+        </div>
+      </section>
+      {/* <GoldPrice /> */}
 
       {/* MENU CONTENT */}
       <div className="jewellery-menu-content">
         <Nav categories={categorySlugs} />
 
-        {loading ? (
-          <div className="loader" aria-label="Մենյուն բեռնվում է...">
+        {loading && (
+          <div className="loader" aria-label="Մենյուն բեռնվում է..." role="status">
             <span>Մենյուն բեռնվում է...</span>
           </div>
-        ) : menu.length === 0 ? (
+        )}
+
+        {!loading && error && (
+          <div className="status-card error" role="alert">
+            <p>{error}</p>
+            <button type="button" className="retry-button" onClick={loadMenu}>
+              Կրկին փորձել
+            </button>
+          </div>
+        )}
+
+        {!loading && !error && menu.length === 0 && (
           <p className="empty-state">
-            Մենյուն դեռ դատարկ է։ Խնդրում ենք փորձել ավելի ուշ կամ կապվել մեզ
-            հետ։
+            Մենյուն դեռ դատարկ է։ Խնդրում ենք փորձել ավելի ուշ կամ կապվել մեզ հետ։
           </p>
-        ) : (
+        )}
+
+        {!loading &&
+          !error &&
+          menu.length > 0 &&
           menu.map((section) => (
             <JewelleryMenuSection
               key={section.id}
               section={section}
               onOpenGallery={openGallery}
             />
-          ))
-        )}
+          ))}
 
         {activeGallery && (
           <ImageModal
@@ -199,8 +218,6 @@ export default function JewelleryMenuPage() {
             item={activeItem}
           />
         )}
-
-
 
         <ScrollToTop />
       </div>
