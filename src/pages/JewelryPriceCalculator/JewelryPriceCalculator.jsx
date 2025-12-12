@@ -12,6 +12,8 @@ export default function JewelryPriceCalculator() {
   const [diamondCut, setDiamondCut] = useState("EX");
 
   const [totalValue, setTotalValue] = useState(null);
+  const [progress, setProgress] = useState(0);
+  const [currency, setCurrency] = useState("USD"); // USD or AMD
 
   const num = (v) => (v === "" || isNaN(v) ? 0 : Number(v));
 
@@ -22,26 +24,47 @@ export default function JewelryPriceCalculator() {
     F: 0.7,
   };
 
+  // Quick gold purity options
+  const goldPurities = ["375", "585", "750", "916"];
+
   const calculateValue = () => {
     if (!goldGram || !goldPurity || !goldPricePerGram || !laborCost) {
       alert("Խնդրում ենք լրացնել ոսկու և աշխատանքի դաշտերը:");
       return;
     }
 
-    // GOLD
-    const purityDecimal = num(goldPurity) / 1000;
-    const goldValue = num(goldGram) * purityDecimal * num(goldPricePerGram);
+    setProgress(0);
+    setTotalValue(null);
 
-    // DIAMOND
-    let diamondValue = 0;
-    if (diamondCarat && diamondPricePerCarat) {
-      const multiplier = diamondCutMultiplier[diamondCut];
-      diamondValue = num(diamondCarat) * num(diamondPricePerCarat) * multiplier;
-    }
+    let step = 0;
+    const interval = setInterval(() => {
+      step += 10;
+      setProgress(step);
+      if (step >= 100) {
+        clearInterval(interval);
 
-    // TOTAL
-    const total = goldValue + num(laborCost) + diamondValue;
-    setTotalValue(total.toFixed(2));
+        // GOLD VALUE
+        const purityDecimal = num(goldPurity) / 1000;
+        const goldValue = num(goldGram) * purityDecimal * num(goldPricePerGram);
+
+        // DIAMOND VALUE
+        let diamondValue = 0;
+        if (diamondCarat && diamondPricePerCarat) {
+          const multiplier = diamondCutMultiplier[diamondCut];
+          diamondValue = num(diamondCarat) * num(diamondPricePerCarat) * multiplier;
+        }
+
+        // TOTAL VALUE
+        let total = goldValue + num(laborCost) + diamondValue;
+
+        // Convert to AMD if needed (example rate: 1 USD = 400 AMD)
+        if (currency === "AMD") {
+          total *= 400;
+        }
+
+        setTotalValue(total.toFixed(2));
+      }
+    }, 50);
   };
 
   return (
@@ -61,6 +84,18 @@ export default function JewelryPriceCalculator() {
 
       <div className="jw-input">
         <label>Purity (Օրինակ՝ 585)</label>
+        <div style={{ display: "flex", gap: "10px", marginBottom: "5px" }}>
+          {goldPurities.map((p) => (
+            <button
+              key={p}
+              type="button"
+              className={goldPurity === p ? "selected-purity" : ""}
+              onClick={() => setGoldPurity(p)}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
         <input
           type="number"
           value={goldPurity}
@@ -118,20 +153,38 @@ export default function JewelryPriceCalculator() {
         </select>
       </div>
 
+      {/* Currency Selector */}
+      <div className="jw-input">
+        <label>Currency</label>
+        <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+          <option value="USD">USD</option>
+          <option value="AMD">AMD</option>
+        </select>
+      </div>
+
+      {/* Calculate Button */}
       <button className="jewbutton" onClick={calculateValue}>
         Հաշվել Ընդհանուր Գինը
       </button>
 
+      {/* Progress Bar */}
+      {progress > 0 && progress < 100 && (
+        <div className="progress-bar-container">
+          <div
+            className="progress-bar"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      )}
+
+      {/* Result */}
       {totalValue && (
         <div className="result">
-          <h3>Ընդհանուր Գին: ${totalValue}</h3>
-
+          <h3>Ընդհանուր Գին: {totalValue} {currency}</h3>
           {diamondCarat && (
             <>
               <p>Ադամանդ՝ {diamondCarat} ct ({diamondCut})</p>
-              <p>
-                Cut multiplier: {diamondCutMultiplier[diamondCut]}×
-              </p>
+              <p>Cut multiplier: {diamondCutMultiplier[diamondCut]}×</p>
             </>
           )}
         </div>

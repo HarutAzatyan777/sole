@@ -111,3 +111,34 @@
     transform: translateY(0);
   }
 }
+/* Quick Purity Buttons */
+.selected-purity {
+  background-color: #00b5be;
+  color: #fff;
+  border: 1px solid #008c95;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.selected-purity:hover {
+  opacity: 0.85;
+}
+
+/* Progress Bar */
+.progress-bar-container {
+  width: 100%;
+  background-color: #e0fafb;
+  border-radius: 8px;
+  margin-top: 15px;
+  height: 12px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #00b5be;
+  width: 0%;
+  transition: width 0.05s ease;
+  border-radius: 8px;
+}

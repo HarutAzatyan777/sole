@@ -20,6 +20,7 @@ import MMToConverter from "./pages/MMToConverter/MMToConverter";
 import MMToConverterEn from "./pages/MMToConverter/MMToConverterEn";
 import JewelryPriceCalculator from "./pages/JewelryPriceCalculator/JewelryPriceCalculator";
 import GoldPrice from "./components/GoldPrice/GoldPrice";
+import JewelryMoodboard from "./pages/JewelryMoodboard/JewelryMoodboard";
 
 const ADMIN_EMAIL = "admin@solejewelry.com";
 
@@ -227,6 +228,17 @@ element={
       </>
     }
   />,
+  <Route
+  key="/jewelry-moodboard"
+  path="/jewelry-moodboard"
+  element={
+    <>
+      <Header />
+      <JewelryMoodboard />
+      <Footer />
+    </>
+  }
+/>,
 
   <Route
   key="/blog-post"
@@ -239,6 +251,7 @@ element={
     </>
   }
 />,
+
 
   <Route key="*" path="*" element={<Navigate to="/" />} />,
 ];
